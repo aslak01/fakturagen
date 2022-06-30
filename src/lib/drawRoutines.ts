@@ -156,7 +156,7 @@ export const drawFakturaInfo = (
       string = String(value.value)
     }
 
-    page.drawText(value, {
+    page.drawText(string, {
       x: width - font.widthOfTextAtSize(string, size),
       y: y - lineHeight * (i + 4),
       size,
