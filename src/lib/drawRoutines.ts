@@ -3,6 +3,7 @@ import {
   formatNumberToCurrency,
   isValidDate
 } from '$lib/utils'
+
 import type {
   Customer,
   Company,
@@ -31,7 +32,10 @@ export const drawTitle = (title: string, settings: Settings) => {
   })
 }
 
-export const drawKunde = (customer: Customer, settings: Settings) => {
+export const drawCustomerInfo = (
+  customer: Customer,
+  settings: Settings
+) => {
   const page = settings.page
   const size = settings.lineSize
   const font = settings.boldFont
@@ -120,7 +124,7 @@ export const drawFakturaLinjer = (
   }
 }
 
-export const drawFakturaInfo = (
+export const drawInvoiceInfo = (
   company: Company,
   invoiceMeta: InvoiceMeta,
   settings: Settings
@@ -131,7 +135,7 @@ export const drawFakturaInfo = (
   const boldFont = settings.boldFont
   const width = settings.width - settings.xMargin
   const y = settings.height - settings.yMargin + 3
-  const x = settings.xMargin
+  // const x = settings.xMargin
   const color = settings.rgb(0, 0, 0)
   const lineHeight = font.heightAtSize(size) + 5
 
@@ -184,11 +188,11 @@ export const drawSums = (
   const font = settings.font
   const boldFont = settings.boldFont
   const width = settings.width - settings.xMargin
-  const y = settings.height - settings.yMargin - settings.marginTop
-  const x = settings.xMargin
+  // const y = settings.height - settings.yMargin - settings.marginTop
+  // const x = settings.xMargin
   const color = settings.rgb(0, 0, 0)
-  const lineHeight = font.heightAtSize(size) + 5
-  const lineHeightBold = boldFont.heightAtSize(size)
+  // const lineHeight = font.heightAtSize(size) + 5
+  // const lineHeightBold = boldFont.heightAtSize(size)
 
   const sum = formatNumberToCurrency(
     lines.reduce((a, b) => +a + +b.price, 0),
@@ -227,12 +231,12 @@ export const drawPayTo = (
   const size = settings.lineSize
   const font = settings.font
   const boldFont = settings.boldFont
-  const width = settings.width - settings.xMargin
-  const y = settings.height - settings.yMargin - settings.marginTop
+  // const width = settings.width - settings.xMargin
+  // const y = settings.height - settings.yMargin - settings.marginTop
   const x = settings.xMargin
   const color = settings.rgb(0, 0, 0)
   const lineHeight = font.heightAtSize(size) + 5
-  const lineHeightBold = boldFont.heightAtSize(size)
+  // const lineHeightBold = boldFont.heightAtSize(size)
 
   const start = linesEnd - 80
 
@@ -245,7 +249,7 @@ export const drawPayTo = (
   })
   for (const [i, value] of Object.entries(bank).entries()) {
     let key = value[0]
-    let string = value[1] as string
+    const string = value[1] as string
     if (key === 'kontonr') {
       key = 'Kontonummer'
     } else if (key === 'bic') {
