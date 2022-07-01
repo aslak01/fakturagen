@@ -250,7 +250,7 @@ export const drawPayTo = (
   for (const [i, value] of Object.entries(bank).entries()) {
     let key = value[0]
     const string = value[1] as string
-    if (key === 'kontonr') {
+    if (key === 'accno') {
       key = 'Kontonummer'
     } else if (key === 'bic') {
       key = 'BIC'
