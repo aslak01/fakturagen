@@ -13,15 +13,15 @@ import type {
   InvoiceMeta
 } from '$lib/interfaces/invoiceStrings'
 
-import type { Settings } from '$lib/interfaces/pdf'
+import type { Settings, PdfFunctions } from '$lib/interfaces/pdf'
 
-export const drawTitle = (title: string, settings: Settings) => {
-  const page = settings.page
+export const drawTitle = (title: string, settings: Settings, pdfFunctions: PdfFunctions) => {
+  const page = pdfFunctions.page
   const size = settings.titleSize
-  const font = settings.boldFont
-  const y = settings.height - settings.yMargin
+  const font = pdfFunctions.boldFont
+  const y = pdfFunctions.height - settings.yMargin
   const x = settings.xMargin
-  const color = settings.rgb(0, 0, 0)
+  const color = pdfFunctions.textColor
 
   page.drawText(title, {
     x,
@@ -34,16 +34,15 @@ export const drawTitle = (title: string, settings: Settings) => {
 
 export const drawCustomerInfo = (
   customer: Customer,
-  settings: Settings
+  settings: Settings, pdfFunctions: PdfFunctions
 ) => {
-  const page = settings.page
+  const page = pdfFunctions.page
   const size = settings.lineSize
-  const font = settings.boldFont
-  const y = settings.height - settings.yMargin - settings.marginTop
+  const font = pdfFunctions.boldFont
+  const y = pdfFunctions.height - settings.yMargin - settings.marginTop
   const x = settings.xMargin
-  const color = settings.rgb(0, 0, 0)
+  const color = pdfFunctions.textColor
   const lineHeight = font.heightAtSize(size) + 5
-
   for (const [i, value] of Object.entries(customer).entries()) {
     let string = value[1]
     if (value[0] === 'orgno') {
@@ -60,21 +59,22 @@ export const drawCustomerInfo = (
   }
 }
 
-export const drawFakturaLinjer = (
+export const drawInvoiceLines = (
   lineHeadings: LineHeadings,
   lines: Line[],
   settings: Settings,
-  currency = 'EUR'
+  pdfFunctions: PdfFunctions,
+  currency = 'EUR', 
 ) => {
-  const page = settings.page
+  const page = pdfFunctions.page
   const size = settings.lineSize
-  const font = settings.font
-  const boldFont = settings.boldFont
-  const width = settings.width - settings.xMargin
+  const font = pdfFunctions.font
+  const boldFont = pdfFunctions.boldFont
+  const width = pdfFunctions.width - settings.xMargin
   const y =
-    settings.height - settings.yMargin - settings.marginTop * 3
+    pdfFunctions.height - settings.yMargin - settings.marginTop * 3
   const x = settings.xMargin
-  const color = settings.rgb(0, 0, 0)
+  const color = pdfFunctions.textColor
   const lineHeight = font.heightAtSize(size) + 5
   const lineHeightBold = boldFont.heightAtSize(size)
 
@@ -86,6 +86,7 @@ export const drawFakturaLinjer = (
     thickness: 1,
     color
   })
+
   for (const [i, value] of Object.values(lineHeadings).entries()) {
     page.drawText(value, {
       x:
@@ -127,16 +128,16 @@ export const drawFakturaLinjer = (
 export const drawInvoiceInfo = (
   company: Company,
   invoiceMeta: InvoiceMeta,
-  settings: Settings
+  settings: Settings, pdfFunctions: PdfFunctions
 ) => {
-  const page = settings.page
+  const page = pdfFunctions.page
   const size = settings.lineSize
-  const font = settings.font
-  const boldFont = settings.boldFont
-  const width = settings.width - settings.xMargin
-  const y = settings.height - settings.yMargin + 3
+  const font = pdfFunctions.font
+  const boldFont = pdfFunctions.boldFont
+  const width = pdfFunctions.width - settings.xMargin
+  const y = pdfFunctions.height - settings.yMargin + 3
   // const x = settings.xMargin
-  const color = settings.rgb(0, 0, 0)
+  const color = pdfFunctions.textColor
   const lineHeight = font.heightAtSize(size) + 5
 
   for (const [i, value] of Object.entries(company).entries()) {
@@ -181,16 +182,17 @@ export const drawSums = (
   lines: Line[],
   settings: Settings,
   linesEnd: number,
-  currency = 'EUR'
+  pdfFunctions: PdfFunctions,
+  currency = 'EUR', 
 ) => {
-  const page = settings.page
+  const page = pdfFunctions.page
   const size = settings.lineSize
-  const font = settings.font
-  const boldFont = settings.boldFont
-  const width = settings.width - settings.xMargin
+  const font = pdfFunctions.font
+  const boldFont = pdfFunctions.boldFont
+  const width = pdfFunctions.width - settings.xMargin
   // const y = settings.height - settings.yMargin - settings.marginTop
   // const x = settings.xMargin
-  const color = settings.rgb(0, 0, 0)
+  const color = pdfFunctions.textColor
   // const lineHeight = font.heightAtSize(size) + 5
   // const lineHeightBold = boldFont.heightAtSize(size)
 
@@ -225,16 +227,16 @@ export const drawSums = (
 export const drawPayTo = (
   bank: Bank,
   settings: Settings,
-  linesEnd: number
+  linesEnd: number, pdfFunctions: PdfFunctions
 ) => {
-  const page = settings.page
+  const page = pdfFunctions.page
   const size = settings.lineSize
-  const font = settings.font
-  const boldFont = settings.boldFont
+  const font = pdfFunctions.font
+  const boldFont = pdfFunctions.boldFont
   // const width = settings.width - settings.xMargin
   // const y = settings.height - settings.yMargin - settings.marginTop
   const x = settings.xMargin
-  const color = settings.rgb(0, 0, 0)
+  const color = pdfFunctions.textColor
   const lineHeight = font.heightAtSize(size) + 5
   // const lineHeightBold = boldFont.heightAtSize(size)
 

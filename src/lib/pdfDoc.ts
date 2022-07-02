@@ -16,7 +16,7 @@ import {
 import {
   drawTitle,
   drawCustomerInfo,
-  drawFakturaLinjer,
+  drawInvoiceLines,
   drawInvoiceInfo,
   drawSums,
   drawPayTo
@@ -32,18 +32,20 @@ export async function drawPdf() {
   const { width, height } = page.getSize()
 
   const settings = {
+    titleSize: 15,
+    lineSize: 10,
+    xMargin: 100,
+    yMargin: 100,
+    marginTop: 80
+  }
+  const pdfFunctions = {
     page,
     width,
     height,
     font: helvetica,
     boldFont: helveticaBold,
     rgb,
-    color: rgb(0, 0, 0),
-    titleSize: 15,
-    lineSize: 10,
-    xMargin: 100,
-    yMargin: 100,
-    marginTop: 80
+    textColor: rgb(0,0,0)
   }
 
   pdfDoc.setTitle(pdfTitle)
@@ -53,23 +55,23 @@ export async function drawPdf() {
   pdfDoc.setCreationDate(new Date())
   pdfDoc.setModificationDate(new Date())
 
-  drawTitle(title, settings)
-  drawCustomerInfo(customer, settings)
-  drawFakturaLinjer(lineHeadings, lines, settings)
-  drawInvoiceInfo(yourCompany, invoiceMeta, settings)
+  drawTitle(title, settings, pdfFunctions)
+  drawCustomerInfo(customer, settings, pdfFunctions)
+  drawInvoiceLines(lineHeadings, lines, settings, pdfFunctions)
+  drawInvoiceInfo(yourCompany, invoiceMeta, settings, pdfFunctions)
 
-  const test = drawFakturaLinjer(lineHeadings, lines, settings)
+  const test = drawInvoiceLines(lineHeadings, lines, settings, pdfFunctions)
 
   page.drawLine({
     start: { x: settings.xMargin, y: test.end },
-    end: { x: settings.width - settings.xMargin, y: test.end },
+    end: { x: pdfFunctions.width - settings.xMargin, y: test.end },
     thickness: 1,
-    color: settings.color
+    color: pdfFunctions.textColor
   })
 
-  drawSums(lines, settings, test.end)
+  drawSums(lines, settings, test.end, pdfFunctions)
 
-  drawPayTo(yourBank, settings, test.end)
+  drawPayTo(yourBank, settings, test.end, pdfFunctions)
 
   const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true })
   return pdfDataUri

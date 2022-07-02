@@ -27,7 +27,6 @@ const returnRelevantRows = (json: XTRFjsonDefinition[]): Line[] => {
 }
 
 export const parseJson = (XTRFjson: XTRFjsonDefinition[]) => {
-  console.log(XTRFjson)
   if (
     !XTRFjson ||
     XTRFjson.length === 0 ||
