@@ -1,4 +1,4 @@
-export const parseDate = (d: number): string => {
+export const parseDate = (d: number | Date): string => {
   const date = new Date(d)
   return new Intl.DateTimeFormat('nb-NO').format(date)
 }

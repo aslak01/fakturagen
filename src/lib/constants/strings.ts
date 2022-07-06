@@ -21,18 +21,9 @@ export const yourCompany = {
 }
 
 export const invoiceMeta = {
-  invoiceDate: {
-    title: 'Fakturadato',
-    value: new Date()
-  },
-  dueDate: {
-    title: 'Betalingsfrist',
-    value: new Date(aMonthInTheFuture())
-  },
-  invoiceNumber: {
-    title: 'Fakturanummer',
-    value: 19
-  }
+  invoiceDate: parseDate(new Date()),
+  dueDate: parseDate(new Date(aMonthInTheFuture())),
+  invoiceNumber: '19'
 }
 
 export const yourBank = {

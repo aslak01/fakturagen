@@ -58,8 +58,19 @@ export async function drawPdf() {
   }
 
   const topRightBox = {
-    xmin: borders.xmax / 2,
+    xmin: borders.xmax / 1.3,
     xmax: borders.xmax
+  }
+
+  const padding = {
+    normal:
+      helvetica.heightAtSize(defaults.size.small) +
+      defaults.leading.small
+  }
+  const heightOfALine = {
+    normal:
+      helvetica.heightAtSize(defaults.size.small) +
+      defaults.leading.small
   }
 
   let titleDim = drawInline(
@@ -71,24 +82,38 @@ export async function drawPdf() {
 
   const customerDimensions = drawLinesLeft(
     Object.values(customer),
-    { x: borders.xmin, y: titleDim.ymax },
+    { x: borders.xmin, y: titleDim.ymax - padding.normal },
     helvetica,
     page
   )
 
-  let endcoords = drawLinesRightAligned(
+  const companyInfo = drawLinesRightAligned(
     Object.values(yourCompany),
     { x: topRightBox.xmax, y: borders.ymin },
     helvetica,
     page
   )
 
-  drawLinesLeft(
-    Object.values(yourBank),
-    { x: topRightBox.xmin, y: borders.ymin },
+  const invoiceDetails = drawLinesRightAligned(
+    Object.values(invoiceMeta),
+    { x: topRightBox.xmax, y: companyInfo.ymax - padding.normal },
     helvetica,
     page
   )
+
+  const invoiceDetailHeadings = drawLinesLeft(
+    Object.values(meta.payInfo[locale]),
+    { x: topRightBox.xmin, y: companyInfo.ymax - padding.normal },
+    helveticaBold,
+    page
+  )
+
+  // drawLinesLeft(
+  //   Object.values(yourBank),
+  //   { x: topRightBox.xmin, y: borders.ymin },
+  //   helvetica,
+  //   page
+  // )
 
   const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true })
 
