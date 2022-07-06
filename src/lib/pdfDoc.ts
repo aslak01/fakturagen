@@ -1,4 +1,4 @@
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
+import { PDFDocument, StandardFonts, rgb, cmyk } from 'pdf-lib'
 
 import {
   yourCompany,
@@ -36,42 +36,72 @@ export async function drawPdf() {
     lineSize: 10,
     xMargin: 100,
     yMargin: 100,
-    marginTop: 80
-  }
-  const pdfFunctions = {
-    page,
+    marginTop: 80,
     width,
     height,
+//    textColor: cmyk(0,0,0,1),
+    textColor: rgb(0,0,0),
     font: helvetica,
-    boldFont: helveticaBold,
-    rgb,
-    textColor: rgb(0,0,0)
+    boldFont: helveticaBold
   }
 
   pdfDoc.setTitle(pdfTitle)
-
   pdfDoc.setAuthor(author)
   pdfDoc.setSubject(service)
   pdfDoc.setCreationDate(new Date())
   pdfDoc.setModificationDate(new Date())
 
-  drawTitle(title, settings, pdfFunctions)
-  drawCustomerInfo(customer, settings, pdfFunctions)
-  drawInvoiceLines(lineHeadings, lines, settings, pdfFunctions)
-  drawInvoiceInfo(yourCompany, invoiceMeta, settings, pdfFunctions)
+  drawTitle(
+    title, 
+    settings, 
+    page
+  )
+  drawCustomerInfo(
+    customer, 
+    settings, 
+    page
+  )
+  drawInvoiceLines(
+    lineHeadings, 
+    lines, 
+    settings, 
+    page
+  )
 
-  const test = drawInvoiceLines(lineHeadings, lines, settings, pdfFunctions)
+  drawInvoiceInfo(
+    yourCompany, 
+    invoiceMeta, 
+    settings, 
+    page
+  )
+
+  const test = drawInvoiceLines(
+    lineHeadings, 
+    lines, 
+    settings, 
+    page
+  )
 
   page.drawLine({
     start: { x: settings.xMargin, y: test.end },
-    end: { x: pdfFunctions.width - settings.xMargin, y: test.end },
+    end: { x: settings.width - settings.xMargin, y: test.end },
     thickness: 1,
-    color: pdfFunctions.textColor
+    color: settings.textColor
   })
 
-  drawSums(lines, settings, test.end, pdfFunctions)
+  drawSums(
+    lines, 
+    settings, 
+    test.end, 
+    page
+  )
 
-  drawPayTo(yourBank, settings, test.end, pdfFunctions)
+  drawPayTo(
+    yourBank, 
+    settings, 
+    test.end, 
+    page
+  )
 
   const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true })
   return pdfDataUri

@@ -80,10 +80,10 @@ export const pdfTitle =
 
 export const title = 'Faktura'
 
-let test = parseJson(json)
+const jsonData = parseJson(json)
 
-export const lines = test?.length
-  ? test
+export const lines = jsonData?.length
+  ? jsonData
   : [
       {
         date: parseDate(randomDate()),
