@@ -12,7 +12,7 @@ import {
   lines,
   pdfTitle
 } from '$lib/constants/strings'
-import { headings, meta } from '$lib/constants/titles'
+import { meta } from '$lib/constants/titles'
 import { defaults } from './constants/pdfSettings'
 import {
   drawInline,
@@ -21,6 +21,8 @@ import {
   drawLinesRightAligned
 } from '$lib/generalisedDrawRoutines'
 
+const locale = 'nb-NO'
+
 export async function drawPdf() {
   const pdfDoc = await PDFDocument.create()
   const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica)
@@ -28,6 +30,7 @@ export async function drawPdf() {
     StandardFonts.HelveticaBold
   )
   const page = pdfDoc.addPage()
+
   const { width, height } = page.getSize()
 
   pdfDoc.setTitle(pdfTitle)
@@ -46,6 +49,7 @@ export async function drawPdf() {
       y: defaults.yMargin
     }
   }
+
   const borders = {
     xmin: defaults.xMargin,
     xmax: width - defaults.xMargin,
@@ -57,25 +61,28 @@ export async function drawPdf() {
     xmin: borders.xmax / 2,
     xmax: borders.xmax
   }
+
   let titleDim = drawInline(
-    title,
+    meta.title[locale],
     { x: bounds.upper.x, y: bounds.upper.y },
     helveticaBold,
     page
   )
-  console.log(borders.ymin, titleDim.ymax)
+
   const customerDimensions = drawLinesLeft(
     Object.values(customer),
     { x: borders.xmin, y: titleDim.ymax },
     helvetica,
     page
   )
+
   let endcoords = drawLinesRightAligned(
     Object.values(yourCompany),
     { x: topRightBox.xmax, y: borders.ymin },
     helvetica,
     page
   )
+
   drawLinesLeft(
     Object.values(yourBank),
     { x: topRightBox.xmin, y: borders.ymin },
@@ -84,5 +91,6 @@ export async function drawPdf() {
   )
 
   const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true })
+
   return pdfDataUri
 }

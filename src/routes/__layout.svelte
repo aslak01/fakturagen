@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import '../app.css'
 </script>
 
 <svelte:head>
-  <title>CVGen</title>
+  <title>Fakturagenerator</title>
 </svelte:head>
 <main>
   <slot />

@@ -1,17 +1,22 @@
-export const headings = {
-  'nb-NO': {
-    date: 'Dato',
-    description: 'Beskrivelse',
-    price: 'Pris'
-  }
-}
-
 export const meta = {
-  'nb-NO': {
-    invoice: 'Faktura',
-    invoiceDate: 'Fakturadato',
-    dueDate: 'Betalingsfrist',
-    invoiceNumber: 'Fakturanummer',
-    payableTo: 'Betales til'
+  lineHeadings: {
+    'nb-NO': {
+      date: 'Dato',
+      description: 'Beskrivelse',
+      price: 'Pris'
+    }
+  },
+  payInfo: {
+    'nb-NO': {
+      invoiceDate: 'Fakturadato',
+      dueDate: 'Betalingsfrist',
+      invoiceNumber: 'Fakturanummer'
+    }
+  },
+  title: {
+    'nb-NO': 'Faktura'
+  },
+  payableTo: {
+    'nb-NO': 'Betales til'
   }
 }
