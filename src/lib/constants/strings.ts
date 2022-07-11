@@ -15,9 +15,8 @@ export const yourCompany = {
   orgno: splitStringInNs(
     import.meta.env.VITE_YOUR_FIRM_ORGNO || '312321123'
   ),
-  adr:
-    import.meta.env.VITE_YOUR_FIRM_ADDR ||
-    'Adressegassa 12, Sted 1234'
+  str: import.meta.env.VITE_YOUR_FIRM_STR || 'Adressegassa 12',
+  poCty: import.meta.env.VITE_YOUR_FIRM_PO_CTY || '1234 Sted'
 }
 
 export const invoiceMeta = {
@@ -42,9 +41,8 @@ export const customer = {
   orgno: splitStringInNs(
     import.meta.env.VITE_MY_CUSTOMER_ORGNO || '123123123'
   ),
-  adr:
-    import.meta.env.VITE_MY_CUSTOMER_ADDR ||
-    'Eksempelvei 21, Byen 1234'
+  str: import.meta.env.VITE_MY_CUSTOMER_STR || 'Eksempelvei 21',
+  poCty: import.meta.env.VITE_MY_CUSTOMER_PO_CTY || '1234 Eksempelby'
 }
 
 export const lineHeadings = {

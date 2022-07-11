@@ -1,8 +1,9 @@
-{
+{prettier
   "useTabs": false,
   "singleQuote": true,
   "trailingComma": "none",
   "printWidth": 70,
   "tabWidth": 2,
-  "semi": false
+  "semi": false,
+  plugins: ['prettier-plugin-svelte']
 }

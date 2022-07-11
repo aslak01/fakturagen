@@ -18,7 +18,8 @@ import {
   drawInline,
   drawLinesRight,
   drawLinesLeft,
-  drawLinesRightAligned
+  drawLinesRightAligned,
+  drawInlineEvenlySpaced
 } from '$lib/generalisedDrawRoutines'
 
 const locale = 'nb-NO'
@@ -108,6 +109,14 @@ export async function drawPdf() {
     page
   )
 
+  const lineHeadingsPos = drawInlineEvenlySpaced(
+    Object.values(lineHeadings),
+    { x: borders.xmin, y: invoiceDetailHeadings.ymax - padding.normal },
+    helveticaBold,
+    page,
+    width,
+    padding
+  )
   // drawLinesLeft(
   //   Object.values(yourBank),
   //   { x: topRightBox.xmin, y: borders.ymin },
