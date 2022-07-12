@@ -72,3 +72,6 @@ export function isValidDate(date: Date) {
     !isNaN(date as unknown as number)
   )
 }
+
+export const sumNrArr = (array: number[]): number =>
+  array.reduce((a, b) => a + b, 0)

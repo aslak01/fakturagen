@@ -18,9 +18,10 @@ import {
   drawInline,
   drawLinesRight,
   drawLinesLeft,
-  drawLinesRightAligned,
-  drawInlineEvenlySpaced
+  drawLinesRightAligned
 } from '$lib/generalisedDrawRoutines'
+
+import { longestLine, drawInlineEvenlySpaced } from './lineDrawer'
 
 const locale = 'nb-NO'
 
@@ -109,14 +110,49 @@ export async function drawPdf() {
     page
   )
 
+  const dates = lines.map((l) => l.date)
+  const descriptions = lines.map((l) => l.description)
+  const prices = lines.map((l) => String(l.price))
+  const longestDate = longestLine(dates, helvetica)
+  const longestDesc = longestLine(descriptions, helvetica)
+  const longestPrice = longestLine(prices, helvetica)
+  const lineLengths = [longestDate, longestDesc, longestPrice]
+  console.log('linelengths', lineLengths)
+  const desiredSpacing = [25, 60, 15]
   const lineHeadingsPos = drawInlineEvenlySpaced(
     Object.values(lineHeadings),
-    { x: borders.xmin, y: invoiceDetailHeadings.ymax - padding.normal },
+    {
+      x: borders.xmin,
+      y: invoiceDetailHeadings.ymax - padding.normal
+    },
     helveticaBold,
     page,
     width,
-    padding
+    desiredSpacing,
+    lineLengths,
+    padding.normal
   )
+  let currLineHeight = padding.normal
+  for (const line of lines) {
+    currLineHeight -=
+      helvetica.heightAtSize(defaults.size.small) +
+      defaults.leading.small
+
+    drawInlineEvenlySpaced(
+      Object.values(line),
+      {
+        x: borders.xmin,
+        y: lineHeadingsPos + currLineHeight
+      },
+      helvetica,
+      page,
+      width,
+      desiredSpacing,
+      lineLengths,
+      padding.normal
+    )
+  }
+
   // drawLinesLeft(
   //   Object.values(yourBank),
   //   { x: topRightBox.xmin, y: borders.ymin },
