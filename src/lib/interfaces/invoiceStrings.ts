@@ -1,3 +1,11 @@
+export type Locale = string
+
+export interface Currency {
+  name: string,
+  short: string,
+  symbol?: string
+}
+
 export interface Customer {
   name: string
   orgno: string
@@ -26,7 +34,7 @@ export interface LineHeadings {
 export interface Line {
   date: string
   description: string
-  price: number
+  price: string
 }
 
 export interface InvoiceMeta {
@@ -40,6 +48,6 @@ export interface InvoiceMeta {
   }
   invoiceNumber: {
     title: string
-    value: number
+    value: string
   }
 }

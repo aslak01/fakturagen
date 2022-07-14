@@ -10,6 +10,14 @@ import {
 import { parseJson } from '$lib/parseJson.js'
 import json from '$lib/jobs.json'
 
+export const locale = "nb-NO"
+
+export const currency = {
+  name: 'Euro',
+  short: 'EUR',
+  symbol: '€'
+}
+
 export const yourCompany = {
   name: import.meta.env.VITE_YOUR_FIRM_NAME || 'Mitt firma',
   orgno: splitStringInNs(
@@ -65,33 +73,40 @@ export const pdfTitle =
   'Faktura fra ' +
   yourCompany.name +
   ' nr. ' +
-  invoiceMeta.invoiceNumber.value
+  invoiceMeta.invoiceNumber
 
 export const title = 'Faktura'
 
 const jsonData = parseJson(json)
 
-export const lines = jsonData?.length
-  ? jsonData
-  : [
-      {
-        date: parseDate(randomDate()),
-        description: 'Noe som koster penger',
-        price: 123.3
-      },
-      {
-        date: parseDate(randomDate()),
-        description: 'Noe annet som koster penger',
-        price: 4.2
-      },
-      {
-        date: parseDate(randomDate()),
-        description: 'En tredje ting',
-        price: 69
-      },
-      {
-        date: parseDate(randomDate()),
-        description: 'En fjerde ting',
-        price: 42
-      }
-    ]
+export const lines =
+  jsonData?.length < 1
+    ? jsonData
+    : [
+        {
+          date: parseDate(randomDate()),
+          description:
+            'DE > NO DAI-2022/14354/#1/1 DE > NO DAI-2022/14354/#1/1 1231 213123: 1',
+          price: '111'
+        },
+        {
+          date: parseDate(randomDate()),
+          description: 'Noe som koster penger',
+          price: '123.3'
+        },
+        {
+          date: parseDate(randomDate()),
+          description: 'Noe annet som koster penger',
+          price: '4.20'
+        },
+        {
+          date: parseDate(randomDate()),
+          description: 'En tredje ting',
+          price: '69'
+        },
+        {
+          date: parseDate(randomDate()),
+          description: 'En fjerde ting',
+          price: '42'
+        }
+      ]

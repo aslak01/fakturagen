@@ -19,7 +19,7 @@ export interface PdfFunctions {
   height: number
   font: PDFFont
   boldFont: PDFFont
-  rgb: Function
+  rgb: RGB
   textColor: RGB
 }
 export interface Coords {
@@ -39,4 +39,11 @@ export interface Boundaries {
     x: number
     y: number
   }
+}
+
+export type Quadrants = number[]
+
+export interface Margins {
+  xMargin: number,
+  yMargin: number
 }

@@ -1,6 +1,10 @@
 import { rgb } from 'pdf-lib'
 
 export const defaults = {
+  margins: {
+    xMargin: 40,
+    yMargin: 40
+  },
   xMargin: 40,
   yMargin: 40,
   color: {

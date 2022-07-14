@@ -1,6 +1,8 @@
 import { PDFDocument, StandardFonts, rgb, cmyk } from 'pdf-lib'
 
 import {
+  locale,
+  currency,
   yourCompany,
   yourBank,
   invoiceMeta,
@@ -21,11 +23,11 @@ import {
   drawLinesRightAligned
 } from '$lib/generalisedDrawRoutines'
 
-import { longestLine, drawInlineEvenlySpaced } from './lineDrawer'
-
-const locale = 'nb-NO'
+import { longestLine, drawInlineEvenlySpaced, lineDrawer } from './lineDrawer'
 
 export async function drawPdf() {
+  if (typeof lines === 'undefined') return
+
   const pdfDoc = await PDFDocument.create()
   const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica)
   const helveticaBold = await pdfDoc.embedFont(
@@ -75,7 +77,7 @@ export async function drawPdf() {
       defaults.leading.small
   }
 
-  let titleDim = drawInline(
+  const titleDim = drawInline(
     meta.title[locale],
     { x: bounds.upper.x, y: bounds.upper.y },
     helveticaBold,
@@ -117,8 +119,8 @@ export async function drawPdf() {
   const longestDesc = longestLine(descriptions, helvetica)
   const longestPrice = longestLine(prices, helvetica)
   const lineLengths = [longestDate, longestDesc, longestPrice]
-  console.log('linelengths', lineLengths)
-  const desiredSpacing = [25, 60, 15]
+  // console.log('linelengths', lineLengths)
+  const desiredSpacing = [15, 75, 10]
   const lineHeadingsPos = drawInlineEvenlySpaced(
     Object.values(lineHeadings),
     {
@@ -127,7 +129,6 @@ export async function drawPdf() {
     },
     helveticaBold,
     page,
-    width,
     desiredSpacing,
     lineLengths,
     padding.normal
@@ -138,7 +139,7 @@ export async function drawPdf() {
       helvetica.heightAtSize(defaults.size.small) +
       defaults.leading.small
 
-    drawInlineEvenlySpaced(
+drawInlineEvenlySpaced(
       Object.values(line),
       {
         x: borders.xmin,
@@ -146,19 +147,15 @@ export async function drawPdf() {
       },
       helvetica,
       page,
-      width,
       desiredSpacing,
       lineLengths,
       padding.normal
     )
   }
+  const constraints = { x: borders.xmin, y: companyInfo.ymax - padding.normal }
+  const quadrants = [15, 75, 10]
 
-  // drawLinesLeft(
-  //   Object.values(yourBank),
-  //   { x: topRightBox.xmin, y: borders.ymin },
-  //   helvetica,
-  //   page
-  // )
+  lineDrawer(lineHeadings, lines, constraints, currency, quadrants, helvetica, page)
 
   const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true })
 
