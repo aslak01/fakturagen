@@ -44,6 +44,11 @@ export interface Boundaries {
 export type Quadrants = number[]
 
 export interface Margins {
-  xMargin: number,
+  xMargin: number
   yMargin: number
+}
+
+export interface TitlesAndDimensions {
+  titles: string[]
+  lineLengths: number[]
 }

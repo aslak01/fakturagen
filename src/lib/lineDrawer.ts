@@ -1,7 +1,12 @@
-import type { Constraints, Quadrants, Margins } from '$lib/interfaces/pdf'
+import type {
+  Constraints,
+  Quadrants,
+  Margins,
+  TitlesAndDimensions
+} from '$lib/interfaces/pdf'
 import type { Line, Currency } from './interfaces/invoiceStrings'
 import type { PDFPage, RGB, PDFFont } from 'pdf-lib'
-import { drawInline } from './generalisedDrawRoutines'
+import { drawInline, drawLinesLeft } from './generalisedDrawRoutines'
 import { defaults } from '$lib/constants/pdfSettings'
 import { sumNrArr } from './utils'
 
@@ -23,7 +28,11 @@ export const relQuadToAbsQuad = (
   quadrants: number[]
 ) => {
   const widths: number[] = []
-  quadrants.forEach((q) => widths.push(Math.round(width * (q / 100))))
+  quadrants.forEach((q) => {
+    const w = width * (q / 100)
+    console.log(w)
+    widths.push(w)
+  })
   return widths
 }
 
@@ -114,8 +123,8 @@ export const drawInlineEvenlySpaced = (
   color: RGB = defaults.color.black,
   leading: number = defaults.leading.tight
 ): number => {
-  const { width, height } = page.getSize()
-  const usableWidth = width - defaults.xMargin * 2
+  const width = page.getWidth()
+  const usableWidth = width - defaults.xMargin
   const absQuads = relQuadToAbsQuad(usableWidth, quadrants)
   //console.log(quadrants)
 
@@ -166,7 +175,7 @@ export const lineLengthFigurerOuter = (
   lineObject.forEach((l) => {
     Object.values(l).forEach((c, i) => {
       const length = font.widthOfTextAtSize(c, size)
-      console.log(length, categoryMaxLengths[i])
+      // console.log(length, categoryMaxLengths[i])
       if (categoryMaxLengths[i] < length)
         categoryMaxLengths[i] = length
     })
@@ -178,6 +187,55 @@ export const lineLengthFigurerOuter = (
   }
 }
 
+export const getXminsAndMaxs = (
+  titlesAndDimensions: TitlesAndDimensions,
+  translatedQuadrants: Quadrants,
+  usableWidth: number,
+  margins: Margins = defaults.margins
+) => {
+  const xMins: number[] = []
+  const xMaxs: number[] = []
+
+  titlesAndDimensions.lineLengths.forEach((_l, i) => {
+    const firstXpos = margins.xMargin
+    xMins.push(
+      i > 0 ? firstXpos + translatedQuadrants[i - 1] : firstXpos
+    )
+  })
+  xMins.forEach((_m, i) => {
+    const length = xMins.length
+    xMaxs.push(i < length - 1 ? xMins[i + 1] : usableWidth)
+  })
+
+  return { xMins, xMaxs }
+}
+
+export const drawPrices = (
+  priceArray: string[],
+  currency: Currency,
+  constraints: { xMin: number; xMax: number; y: number },
+  page: PDFPage,
+  font: PDFFont,
+  size: number = defaults.size.small
+) => {
+  const heightOfLine =
+    font.heightAtSize(size) + defaults.leading.small
+  let yPos = constraints.y
+  priceArray.forEach((price) => {
+    const curr = currency.symbol || currency.short
+    page.drawText(curr, {
+      x: constraints.xMin,
+      y: yPos
+    })
+    const lengthOfPrice = font.widthOfTextAtSize(price, size)
+    page.drawText(price, {
+      x: constraints.xMax - lengthOfPrice,
+      y: yPos
+    })
+    yPos -= heightOfLine
+  })
+}
+
 export const lineDrawer = (
   headingObject: Line,
   lineObject: Line[],
@@ -185,32 +243,74 @@ export const lineDrawer = (
   currency: Currency,
   quadrants: Quadrants,
   font: PDFFont,
+  boldFont: PDFFont,
   page: PDFPage,
   size: number = defaults.size.small,
-  margins: Margins = defaults.margins 
+  margins: Margins = defaults.margins
 ) => {
-  const titlesAndDimensions = lineLengthFigurerOuter(headingObject, lineObject, font, size)
+  const titlesAndDimensions = lineLengthFigurerOuter(
+    headingObject,
+    lineObject,
+    font,
+    size
+  )
   // todo: implement the auto sizing algorithm
 
-  const { width, height } = page.getSize()
-  const usableWidth = width - (margins.xMargin * 2)
+  const width = page.getWidth()
+  const usableWidth = width - margins.xMargin
+
   const translatedQuadrants = relQuadToAbsQuad(usableWidth, quadrants)
-  console.log('titles&dims', titlesAndDimensions, 'absQuads', translatedQuadrants, 'constraints', constraints, 'curr', currency, 'quads', quadrants)
-  
-  const xMins: number[] = []
-  const xMaxs: number[] = []
-  titlesAndDimensions.lineLengths.forEach((_l, i) => {
-    const firstXpos = margins.xMargin
-    xMins.push(i > 0 ? firstXpos + translatedQuadrants[i - 1] : firstXpos)
+
+  const { xMins, xMaxs } = getXminsAndMaxs(
+    titlesAndDimensions,
+    translatedQuadrants,
+    usableWidth
+  )
+  console.log(titlesAndDimensions)
+
+  let titlesY = { ymax: 0 }
+  titlesAndDimensions.titles.forEach((title, i) => {
+    titlesY = drawInline(
+      title,
+      { x: xMins[i], y: constraints.y },
+      boldFont,
+      page
+    )
   })
-  xMins.forEach((_m, i) => {
-    const length = xMins.length
-    xMaxs.push(i < length - 1 ? xMins[i + 1]: usableWidth )
-  })
-  
-  console.log('xMins', xMins, 'xMaxs', xMaxs, 'usableWidth', usableWidth)
 
+  const descriptionArray = lineObject.map((l) => l.description)
+  const priceArray = lineObject.map((l) => l.price)
+  const dateArray = lineObject.map((l) => l.date)
 
+  drawPrices(
+    priceArray,
+    currency,
+    { xMin: xMins[2], xMax: xMaxs[2], y: titlesY.ymax },
+    page,
+    font
+  )
 
+  drawLinesLeft(
+    descriptionArray,
+    { x: xMins[1], y: titlesY.ymax },
+    font,
+    page
+  )
+  drawLinesLeft(
+    dateArray,
+    { x: xMins[0], y: titlesY.ymax },
+    font,
+    page
+  )
+  console.log(priceArray)
+  console.log(
+    'xMins',
+    xMins,
+    'xMaxs',
+    xMaxs,
+    'usableWidth',
+    usableWidth,
+    'width',
+    width
+  )
 }
-
