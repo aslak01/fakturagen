@@ -18,5 +18,8 @@ export const defaults = {
   leading: {
     tight: 2,
     small: 5
+  },
+  gap: {
+    small: 20
   }
 }
