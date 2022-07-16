@@ -52,3 +52,8 @@ export interface TitlesAndDimensions {
   titles: string[]
   lineLengths: number[]
 }
+
+export interface Vat {
+  enabled: boolean
+  rate: number
+}

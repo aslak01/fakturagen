@@ -3,7 +3,9 @@ export const meta = {
     'nb-NO': {
       date: 'Dato',
       description: 'Beskrivelse',
-      price: 'Pris'
+      price: 'Pris',
+      vat: 'MVA',
+      sum: 'Sum'
     }
   },
   payInfo: {

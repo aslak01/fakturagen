@@ -10,12 +10,17 @@ import {
 import { parseJson } from '$lib/parseJson.js'
 import json from '$lib/jobs.json'
 
-export const locale = "nb-NO"
+export const locale = 'nb-NO'
 
 export const currency = {
   name: 'Euro',
   short: 'EUR',
   symbol: '€'
+}
+
+export const vat = {
+  enabled: true,
+  rate: 25
 }
 
 export const yourCompany = {
@@ -56,7 +61,9 @@ export const customer = {
 export const lineHeadings = {
   date: 'Dato',
   description: 'Beskrivelse',
-  price: 'Pris'
+  price: 'Pris',
+  vat: 'MVA',
+  sum: 'Sum'
 }
 
 export const author =
@@ -85,8 +92,7 @@ export const lines =
     : [
         {
           date: parseDate(randomDate()),
-          description:
-            'DE > NO DAI-2022/14354/#1/1 DE > NO DAI-2022/14354/#1/1 1231 213123: 1',
+          description: 'DE > NO DAI-2022/14354/#1/1',
           price: '111'
         },
         {
