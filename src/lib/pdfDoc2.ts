@@ -119,9 +119,9 @@ export async function drawPdf() {
     y: invoiceDetailHeadings.ymax - padding.normal
   }
   // const quadrants = [20, 79.5, 0.5]
-  const quadrants = [15, 50, 11, 9, 15]
+  const quadrants = [10, 55, 11, 9, 15]
   const headings = meta.lineHeadings[locale]
-  lineDrawer(
+  const linesEnd = lineDrawer(
     headings,
     lines,
     constraints,
@@ -132,7 +132,17 @@ export async function drawPdf() {
     helveticaBold,
     page
   )
-
+  const payHeading = page.drawText(meta.payableTo[locale], {
+    x: borders.xmin,
+    y: linesEnd - heightOfALine.normal,
+    font: helveticaBold
+  })
+  const payDetails = drawLinesLeft(
+    Object.values(yourBank),
+    { x: borders.xmin, y: linesEnd - heightOfALine.normal * 2 },
+    helvetica,
+    page
+  )
   const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true })
 
   return pdfDataUri

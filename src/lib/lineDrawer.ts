@@ -252,4 +252,5 @@ export const lineDrawer = (
     }
     linePos -= lineHeight
   })
+  return linePos
 }
