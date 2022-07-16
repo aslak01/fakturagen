@@ -1,6 +1,11 @@
 export const parseDate = (d: number | Date): string => {
   const date = new Date(d)
-  return new Intl.DateTimeFormat('nb-NO').format(date)
+  const options: Intl.DateTimeFormatOptions = {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit'
+  }
+  return new Intl.DateTimeFormat('nb-NO', options).format(date)
 }
 
 export const parseISOdate = (d: number): string => {
