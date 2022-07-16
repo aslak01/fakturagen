@@ -12,23 +12,19 @@ import {
   service,
   title,
   lines,
-  pdfTitle
+  pdfTitle,
+  vat
 } from '$lib/constants/strings'
 
 import { meta } from '$lib/constants/titles'
 import { defaults } from './constants/pdfSettings'
 import {
   drawInline,
-  drawLinesRight,
   drawLinesLeft,
   drawLinesRightAligned
 } from '$lib/generalisedDrawRoutines'
 
-import {
-  longestLine,
-  drawInlineEvenlySpaced,
-  lineDrawer
-} from './lineDrawer'
+import { lineDrawer } from './lineDrawer'
 
 export async function drawPdf() {
   if (typeof lines === 'undefined') return
@@ -120,59 +116,19 @@ export async function drawPdf() {
     helveticaBold,
     page
   )
-
-  // const dates = lines.map((l) => l.date)
-  // const descriptions = lines.map((l) => l.description)
-  // const prices = lines.map((l) => String(l.price))
-  // const longestDate = longestLine(dates, helvetica)
-  // const longestDesc = longestLine(descriptions, helvetica)
-  // const longestPrice = longestLine(prices, helvetica)
-  // const lineLengths = [longestDate, longestDesc, longestPrice]
-  // // console.log('linelengths', lineLengths)
-  // const desiredSpacing = [15, 75, 10]
-  // const lineHeadingsPos = drawInlineEvenlySpaced(
-  //   Object.values(lineHeadings),
-  //   {
-  //     x: borders.xmin,
-  //     y: invoiceDetailHeadings.ymax - padding.normal
-  //   },
-  //   helveticaBold,
-  //   page,
-  //   desiredSpacing,
-  //   lineLengths,
-  //   padding.normal
-  // )
-  // let currLineHeight = padding.normal
-  // for (const line of lines) {
-  //   currLineHeight -=
-  //     helvetica.heightAtSize(defaults.size.small) +
-  //     defaults.leading.small
-  //
-  //   drawInlineEvenlySpaced(
-  //     Object.values(line),
-  //     {
-  //       x: borders.xmin,
-  //       y: lineHeadingsPos + currLineHeight
-  //     },
-  //     helvetica,
-  //     page,
-  //     desiredSpacing,
-  //     lineLengths,
-  //     padding.normal
-  //   )
-  // }
   const constraints = {
     x: borders.xmin,
     y: invoiceDetailHeadings.ymax - padding.normal
   }
   // const quadrants = [20, 79.5, 0.5]
-  const quadrants = [10, 85, 0.1]
-
+  const quadrants = [15, 50, 10, 10, 15]
+  const headings = meta.lineHeadings[locale]
   lineDrawer(
-    lineHeadings,
+    headings,
     lines,
     constraints,
     currency,
+    vat,
     quadrants,
     helvetica,
     helveticaBold,

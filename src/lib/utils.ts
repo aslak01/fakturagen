@@ -17,12 +17,14 @@ export const formatNumberToCurrency = (
   n: number,
   currency = 'EUR',
   locale = 'nb-NO'
-) => {
-  return new Intl.NumberFormat(locale, {
+) =>
+  new Intl.NumberFormat(locale, {
     style: 'currency',
     currency
   }).format(n)
-}
+
+export const formatNumberToPercent = (n: number, locale = 'nb-NO') =>
+  new Intl.NumberFormat(locale, { style: 'percent' }).format(n)
 
 export const splitStringInNs = (string: string, n = 3) => {
   let str = string
