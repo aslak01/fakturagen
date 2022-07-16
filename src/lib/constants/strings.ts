@@ -58,14 +58,6 @@ export const customer = {
   poCty: import.meta.env.VITE_MY_CUSTOMER_PO_CTY || '1234 Eksempelby'
 }
 
-export const lineHeadings = {
-  date: 'Dato',
-  description: 'Beskrivelse',
-  price: 'Pris',
-  vat: 'MVA',
-  sum: 'Sum'
-}
-
 export const author =
   typeof import.meta.env.VITE_MY_NAME === 'string'
     ? import.meta.env.VITE_MY_NAME
@@ -86,33 +78,30 @@ export const title = 'Faktura'
 
 const jsonData = parseJson(json)
 
-export const lines =
-  jsonData?.length < 1
-    ? jsonData
-    : [
-        {
-          date: parseDate(randomDate()),
-          description: 'DE > NO DAI-2022/14354/#1/1',
-          price: '111'
-        },
-        {
-          date: parseDate(randomDate()),
-          description: 'Noe som koster penger',
-          price: '123.3'
-        },
-        {
-          date: parseDate(randomDate()),
-          description: 'Noe annet som koster penger',
-          price: '4.20'
-        },
-        {
-          date: parseDate(randomDate()),
-          description: 'En tredje ting',
-          price: '69'
-        },
-        {
-          date: parseDate(randomDate()),
-          description: 'En fjerde ting',
-          price: '42'
-        }
-      ]
+export const lines = jsonData || [
+  {
+    date: parseDate(randomDate()),
+    description: 'DE > NO DAI-2022/14354/#1/1',
+    price: '111'
+  },
+  {
+    date: parseDate(randomDate()),
+    description: 'Noe som koster penger',
+    price: '123.3'
+  },
+  {
+    date: parseDate(randomDate()),
+    description: 'Noe annet som koster penger',
+    price: '4.20'
+  },
+  {
+    date: parseDate(randomDate()),
+    description: 'En tredje ting',
+    price: '69'
+  },
+  {
+    date: parseDate(randomDate()),
+    description: 'En fjerde ting',
+    price: '42'
+  }
+]

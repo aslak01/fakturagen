@@ -29,7 +29,7 @@ export const relQuadToAbsQuad = (
   quadrants: number[]
 ) => {
   const widths: number[] = []
-  quadrants.forEach((q, i) => {
+  quadrants.forEach((q) => {
     const w = width * (q / 100)
     widths.push(w)
   })
@@ -120,12 +120,14 @@ export const lineLengthFigurerOuter = (
   const categories: string[] = []
   const categoryMaxLengths: number[] = []
   Object.values(headingObject).forEach((cat) => {
-    categories.push(cat)
-    categoryMaxLengths.push(font.widthOfTextAtSize(cat, size))
+    const catStr = String(cat)
+    categories.push(catStr)
+    categoryMaxLengths.push(font.widthOfTextAtSize(catStr, size))
   })
   lineArray.forEach((l) => {
     Object.values(l).forEach((c, i) => {
-      const length = font.widthOfTextAtSize(c, size)
+      const cStr = String(c)
+      const length = font.widthOfTextAtSize(cStr, size)
       if (categoryMaxLengths[i] < length)
         categoryMaxLengths[i] = length
     })
@@ -145,14 +147,12 @@ export const getXminsAndMaxs = (
 ) => {
   const xMins: number[] = []
   const xMaxs: number[] = []
-  const noCols = titlesAndDimensions.lineLengths.length
   titlesAndDimensions.lineLengths.forEach((_l, i) => {
     const firstXpos = margins.xMargin
     const sumSoFar = translatedQuadrants
       .slice(0, i)
       .reduce((a, b) => a + b, 0)
     const xMin = i > 0 ? firstXpos + sumSoFar : firstXpos
-    i !== noCols ? xMin + gap : ''
     xMins.push(xMin)
   })
   xMins.forEach((_m, i) => {
@@ -161,6 +161,7 @@ export const getXminsAndMaxs = (
     xMaxs.push(xMax)
   })
 
+  console.log('usableWidth', usableWidth, xMins, xMaxs)
   return { xMins, xMaxs }
 }
 
@@ -194,9 +195,7 @@ export const lineDrawer = (
   // todo: implement the auto sizing algorithm
 
   const width = page.getWidth()
-  const usableWidth =
-    width - margins.xMargin - gap * (quadrants.length - 1)
-
+  const usableWidth = width - margins.xMargin
   const translatedQuadrants = relQuadToAbsQuad(usableWidth, quadrants)
 
   const { xMins, xMaxs } = getXminsAndMaxs(

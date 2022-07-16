@@ -7,10 +7,8 @@ import {
   yourBank,
   invoiceMeta,
   customer,
-  lineHeadings,
   author,
   service,
-  title,
   lines,
   pdfTitle,
   vat
@@ -121,7 +119,7 @@ export async function drawPdf() {
     y: invoiceDetailHeadings.ymax - padding.normal
   }
   // const quadrants = [20, 79.5, 0.5]
-  const quadrants = [15, 50, 10, 10, 15]
+  const quadrants = [15, 50, 11, 9, 15]
   const headings = meta.lineHeadings[locale]
   lineDrawer(
     headings,
