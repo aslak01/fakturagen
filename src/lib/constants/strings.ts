@@ -7,21 +7,34 @@ import {
   splitStrInIBAN
 } from '$lib/utils'
 
+import type { Currencies } from '$lib/interfaces/invoiceStrings'
+
 import { parseJson } from '$lib/parseJson.js'
 
 import json from '$lib/jobs.json'
 
-export const locale = 'nb-NO'
+export const locale = import.meta.env.VITE_CURRENT_LOCALE || 'en-UK'
 
-export const currency = {
-  name: 'Euro',
-  short: 'EUR',
-  symbol: '€'
+const curr = import.meta.env.VITE_CURRENCY_ABBREV || 'EUR'
+
+export const currencies: Currencies = {
+  NOK: {
+    name: 'Norske kroner',
+    short: 'NOK',
+    symbol: 'kr'
+  },
+  EUR: {
+    name: 'Euro',
+    short: 'EUR',
+    symbol: '€'
+  }
 }
 
+export const currency = currencies[curr]
+
 export const vat = {
-  enabled: true,
-  rate: 25
+  enabled: import.meta.env.VITE_VAT_ENABLED || true,
+  rate: import.meta.env.VITE_VAT_RATE || 25
 }
 
 export const yourCompany = {

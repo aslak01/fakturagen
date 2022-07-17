@@ -6,6 +6,10 @@ export interface Currency {
   symbol?: string
 }
 
+export interface Currencies {
+  [key: string]: Currency
+}
+
 export interface Customer {
   name: string
   orgno: string
