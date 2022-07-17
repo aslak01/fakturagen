@@ -15,7 +15,7 @@ import { parseJson } from '$lib/parseJson.js'
 
 import json from '$lib/jobs.json'
 
-export const locale = import.meta.env.VITE_CURRENT_LOCALE || 'en-UK'
+export const locale = import.meta.env.VITE_CURRENT_LOCALE || 'nb-NO'
 
 const curr = import.meta.env.VITE_CURRENCY_ABBREV || 'EUR'
 

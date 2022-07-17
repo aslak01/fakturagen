@@ -1,4 +1,4 @@
-import { PDFDocument, StandardFonts, rgb, cmyk } from 'pdf-lib'
+import { PDFDocument, StandardFonts, cmyk } from 'pdf-lib'
 
 import {
   locale,

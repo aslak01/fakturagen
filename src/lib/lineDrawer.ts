@@ -252,5 +252,49 @@ export const lineDrawer = (
     }
     linePos -= lineHeight
   })
+  const pricesArray = lineArray.map((i) => i.price)
+  sumsDrawer(pricesArray, vat, linePos, xMaxs, page, font)
   return linePos
+}
+
+export const sumsDrawer = (
+  pricesArray: string[],
+  vat: Vat,
+  linesEnd: number,
+  xMaxs: number[],
+  page: PDFPage,
+  font: PDFFont,
+  size: number = defaults.size.small
+) => {
+  const priceNumbersArray = pricesArray.map((i) => Number(i))
+  const rawSum = sumNrArr(priceNumbersArray)
+  const sumString = formatNumberToCurrency(rawSum)
+  const lengthOfSumString = font.widthOfTextAtSize(sumString, size)
+  page.drawText(sumString, {
+    x: xMaxs[2] - lengthOfSumString,
+    y: linesEnd
+  })
+  if (vat.enabled) {
+    const vatSum = rawSum * (vat.rate / 100)
+    const vatSumString = formatNumberToCurrency(vatSum)
+    const lengthOfVatSumString = font.widthOfTextAtSize(
+      vatSumString,
+      size
+    )
+    page.drawText(vatSumString, {
+      x: xMaxs[3] - lengthOfVatSumString,
+      y: linesEnd
+    })
+
+    const summarium = rawSum + vatSum
+    const summariumString = formatNumberToCurrency(summarium)
+    const lengthOfSummariumString = font.widthOfTextAtSize(
+      summariumString,
+      size
+    )
+    page.drawText(summariumString, {
+      x: xMaxs[4] - lengthOfSummariumString,
+      y: linesEnd
+    })
+  }
 }
