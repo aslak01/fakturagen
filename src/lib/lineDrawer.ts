@@ -63,7 +63,6 @@ export const adaptArrays = (
   const adapted = evaluatedArr
   while (evaluateQuadArrays(adapted, comparisonArr) === false) {
     adapted.forEach((n, i) => {
-      console.log(adapted)
       const target = comparisonArr[i]
       if (n > target) {
         const prevTarget = comparisonArr[i - 1]
@@ -161,7 +160,6 @@ export const getXminsAndMaxs = (
     xMaxs.push(xMax)
   })
 
-  console.log('usableWidth', usableWidth, xMins, xMaxs)
   return { xMins, xMaxs }
 }
 
@@ -235,7 +233,9 @@ export const lineDrawer = (
     })
 
     if (vat.enabled) {
-      const vatString = vat.rate + ' %'
+      const vatString = formatNumberToCurrency(
+        (vat.rate / 100) * Number(line.price)
+      )
       const width = font.widthOfTextAtSize(vatString, size)
       page.drawText(vatString, {
         x: xMaxs[3] - width,

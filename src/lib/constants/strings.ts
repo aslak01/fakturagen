@@ -7,6 +7,8 @@ import {
   splitStrInIBAN
 } from '$lib/utils'
 
+import { sumNrArr, formatNumberToCurrency } from '$lib/utils'
+
 import type { Currencies } from '$lib/interfaces/invoiceStrings'
 
 import { parseJson } from '$lib/parseJson.js'
@@ -31,9 +33,11 @@ export const currencies: Currencies = {
 }
 
 export const currency = currencies[curr]
-
 export const vat = {
-  enabled: import.meta.env.VITE_VAT_ENABLED || true,
+  enabled:
+    typeof import.meta.env.VITE_VAT_ENABLED === 'string'
+      ? !!+import.meta.env.VITE_VAT_ENABLED
+      : true,
   rate: import.meta.env.VITE_VAT_RATE || 25
 }
 
@@ -119,3 +123,9 @@ export const lines = jsonData || [
     price: '42'
   }
 ]
+
+const prices = lines.map((i) => Number(i.price))
+
+export const sum = vat.enabled
+  ? formatNumberToCurrency(sumNrArr(prices) * (vat.rate / 100 + 1))
+  : formatNumberToCurrency(sumNrArr(prices))

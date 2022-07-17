@@ -11,7 +11,8 @@ import {
   service,
   lines,
   pdfTitle,
-  vat
+  vat,
+  sum
 } from '$lib/constants/strings'
 
 import { meta } from '$lib/constants/titles'
@@ -119,7 +120,7 @@ export async function drawPdf() {
     y: invoiceDetailHeadings.ymax - padding.normal
   }
   // const quadrants = [20, 79.5, 0.5]
-  const quadrants = [10, 55, 11, 9, 15]
+  const quadrants = vat.enabled ? [10, 52, 11, 12, 16] : [10, 74, 16]
   const headings = meta.lineHeadings[locale]
   const linesEnd = lineDrawer(
     headings,
@@ -132,14 +133,32 @@ export async function drawPdf() {
     helveticaBold,
     page
   )
-  const payHeading = page.drawText(meta.payableTo[locale], {
-    x: borders.xmin,
+
+  const widthOfSum = helveticaBold.widthOfTextAtSize(
+    sum,
+    defaults.size.medium
+  )
+  page.drawText(sum, {
+    x: borders.xmax - widthOfSum,
     y: linesEnd - heightOfALine.normal,
+    font: helveticaBold,
+    size: defaults.size.medium
+  })
+
+  const payHeading = meta.payableTo[locale]
+  const widthOfPayHeading = helveticaBold.widthOfTextAtSize(
+    payHeading,
+    defaults.size.small
+  )
+  const payHeadingPos = page.drawText(payHeading, {
+    x: borders.xmax - widthOfPayHeading,
+    y: linesEnd - heightOfALine.normal * 3,
     font: helveticaBold
   })
-  const payDetails = drawLinesLeft(
+
+  const payDetails = drawLinesRightAligned(
     Object.values(yourBank),
-    { x: borders.xmin, y: linesEnd - heightOfALine.normal * 2 },
+    { x: borders.xmax, y: linesEnd - heightOfALine.normal * 4 },
     helvetica,
     page
   )
