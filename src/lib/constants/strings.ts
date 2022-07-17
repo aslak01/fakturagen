@@ -8,6 +8,7 @@ import {
 } from '$lib/utils'
 
 import { parseJson } from '$lib/parseJson.js'
+
 import json from '$lib/jobs.json'
 
 export const locale = 'nb-NO'
