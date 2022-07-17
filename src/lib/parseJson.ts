@@ -20,7 +20,7 @@ const returnRelevantRows = (json: XTRFjsonDefinition[]): Line[] => {
         x.overview.targetLanguages[0].symbol +
         '    ' +
         x.overview.idNumber,
-      price: x.overview.jobValue.value
+      price: String(x.overview.jobValue.value)
     }
   })
   return res

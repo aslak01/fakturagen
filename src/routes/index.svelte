@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { drawPdf } from '$lib/pdfDoc2'
+  import { drawPdf } from '$lib/pdfDoc'
   let pdfNotGenerated = true
   let pdf = {} as HTMLIFrameElement
 
