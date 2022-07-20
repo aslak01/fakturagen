@@ -13,5 +13,5 @@ pnpm i
 
 pnpm run dev
 
-localhost:3000
+localhost:5173
 ```
