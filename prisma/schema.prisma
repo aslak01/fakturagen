@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Settings {
+  locale      String @id
+}
+
+model Vat {
+  uid         String @id @default(cuid())
+  enabled     Boolean
+  rate        Int
+}
+
+model Company {
+  uid         String @id @default(cuid())
+  ownCompany  Boolean @default(false)
+  name        String
+  orgNo       String
+  street      String
+  poNo        String
+  city        String
+  currency    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  banks       Bank[]
+  invoices    Invoice[]
+}
+
+model Bank {
+  uid         String @id @default(cuid())
+  companyId   String
+  accno       String
+  iban        String
+  bic         String
+  bank        String
+  company     Company @relation(fields: [companyId], references: [uid])
+}
+
+model Invoice {
+  uid         String @id @default(cuid())
+  companyId   String
+  invoiceNo   Int @unique
+  date        DateTime @default(now())
+  dueDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  lines       InvoiceLine[]
+  company     Company @relation(fields: [companyId], references: [uid])
+}
+
+model InvoiceLine {
+  uid         String @id @default(cuid())
+  invoiceId   String
+  date        String
+  description String
+  price       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  invoice     Invoice @relation(fields: [invoiceId], references: [uid])
+}

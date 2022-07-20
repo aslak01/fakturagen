@@ -8,3 +8,4 @@ node_modules
 !.env.example
 *.log
 static/fonts
+prisma/faktura.db

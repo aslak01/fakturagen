@@ -5,4 +5,5 @@
   "trailingComma": "none",
   "printWidth": 70,
   "semi": false,
+  "plugins": ["./node_modules/prettier-plugin-svelte"]
 }
