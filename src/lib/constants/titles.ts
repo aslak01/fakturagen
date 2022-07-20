@@ -46,6 +46,6 @@ export const meta: InvoiceMeta = {
     'nb-NO': 'Faktura'
   },
   payableTo: {
-    'nb-NO': 'Betales til'
+    'nb-NO': 'betales til'
   }
 }

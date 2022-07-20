@@ -5,11 +5,11 @@ import type {
   TitlesAndDimensions,
   Vat
 } from '$lib/interfaces/pdf'
-import type { Line, Currency } from './interfaces/invoiceStrings'
+import type { Line, Currency } from '$lib/interfaces/invoiceStrings'
 import type { PDFPage, PDFFont } from 'pdf-lib'
 import { drawInline } from './generalisedDrawRoutines'
 import { defaults } from '$lib/constants/pdfSettings'
-import { sumNrArr, formatNumberToCurrency } from './utils'
+import { sumNrArr, formatNumberToCurrency } from '$lib/utils'
 
 export const longestLine = (
   lines: string[],
@@ -167,8 +167,9 @@ export const lineDrawer = (
   headingObject: Line,
   lineArray: Line[],
   constraints: Constraints,
-  currency: Currency,
   vat: Vat,
+  currency: Currency,
+  locale: string,
   quadrants: Quadrants,
   font: PDFFont,
   boldFont: PDFFont,
@@ -225,7 +226,11 @@ export const lineDrawer = (
       x: xMins[1],
       y: linePos
     })
-    const price = formatNumberToCurrency(Number(line.price))
+    const price = formatNumberToCurrency(
+      Number(line.price),
+      currency.short,
+      locale
+    )
     const lengthOfPrice = font.widthOfTextAtSize(price, size)
     page.drawText(price, {
       x: xMaxs[2] - lengthOfPrice,
@@ -234,7 +239,9 @@ export const lineDrawer = (
 
     if (vat.enabled) {
       const vatString = formatNumberToCurrency(
-        (vat.rate / 100) * Number(line.price)
+        (vat.rate / 100) * Number(line.price),
+        currency.short,
+        locale
       )
       const width = font.widthOfTextAtSize(vatString, size)
       page.drawText(vatString, {
@@ -242,7 +249,9 @@ export const lineDrawer = (
         y: linePos
       })
       const priceWithVat = formatNumberToCurrency(
-        Number(line.price) * (vat.rate / 100 + 1)
+        Number(line.price) * (vat.rate / 100 + 1),
+        currency.short,
+        locale
       )
       const lengthOfVat = font.widthOfTextAtSize(priceWithVat, size)
       page.drawText(priceWithVat, {
@@ -253,13 +262,24 @@ export const lineDrawer = (
     linePos -= lineHeight
   })
   const pricesArray = lineArray.map((i) => i.price)
-  sumsDrawer(pricesArray, vat, linePos, xMaxs, page, font)
+  sumsDrawer(
+    pricesArray,
+    vat,
+    currency,
+    locale,
+    linePos,
+    xMaxs,
+    page,
+    boldFont
+  )
   return linePos
 }
 
 export const sumsDrawer = (
   pricesArray: string[],
   vat: Vat,
+  currency: Currency,
+  locale: string,
   linesEnd: number,
   xMaxs: number[],
   page: PDFPage,
@@ -268,33 +288,48 @@ export const sumsDrawer = (
 ) => {
   const priceNumbersArray = pricesArray.map((i) => Number(i))
   const rawSum = sumNrArr(priceNumbersArray)
-  const sumString = formatNumberToCurrency(rawSum)
+  const sumString = formatNumberToCurrency(
+    rawSum,
+    currency.short,
+    locale
+  )
   const lengthOfSumString = font.widthOfTextAtSize(sumString, size)
   page.drawText(sumString, {
     x: xMaxs[2] - lengthOfSumString,
-    y: linesEnd
+    y: linesEnd,
+    font
   })
   if (vat.enabled) {
     const vatSum = rawSum * (vat.rate / 100)
-    const vatSumString = formatNumberToCurrency(vatSum)
+    const vatSumString = formatNumberToCurrency(
+      vatSum,
+      currency.short,
+      locale
+    )
     const lengthOfVatSumString = font.widthOfTextAtSize(
       vatSumString,
       size
     )
     page.drawText(vatSumString, {
       x: xMaxs[3] - lengthOfVatSumString,
-      y: linesEnd
+      y: linesEnd,
+      font
     })
 
     const summarium = rawSum + vatSum
-    const summariumString = formatNumberToCurrency(summarium)
+    const summariumString = formatNumberToCurrency(
+      summarium,
+      currency.short,
+      locale
+    )
     const lengthOfSummariumString = font.widthOfTextAtSize(
       summariumString,
       size
     )
     page.drawText(summariumString, {
       x: xMaxs[4] - lengthOfSummariumString,
-      y: linesEnd
+      y: linesEnd,
+      font
     })
   }
 }

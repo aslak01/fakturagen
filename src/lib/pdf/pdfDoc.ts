@@ -16,12 +16,12 @@ import {
 } from '$lib/constants/strings'
 
 import { meta } from '$lib/constants/titles'
-import { defaults } from './constants/pdfSettings'
+import { defaults } from '$lib/constants/pdfSettings'
 import {
   drawInline,
   drawLinesLeft,
   drawLinesRightAligned
-} from '$lib/generalisedDrawRoutines'
+} from '$lib/pdf/generalisedDrawRoutines'
 
 import { lineDrawer } from './lineDrawer'
 
@@ -126,8 +126,9 @@ export async function drawPdf() {
     headings,
     lines,
     constraints,
-    currency,
     vat,
+    currency,
+    locale,
     quadrants,
     helvetica,
     helveticaBold,
@@ -140,7 +141,7 @@ export async function drawPdf() {
   )
   page.drawText(sum, {
     x: borders.xmax - widthOfSum,
-    y: linesEnd - heightOfALine.normal,
+    y: linesEnd - heightOfALine.normal * 2,
     font: helveticaBold,
     size: defaults.size.medium
   })

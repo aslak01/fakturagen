@@ -11,9 +11,9 @@ import { sumNrArr, formatNumberToCurrency } from '$lib/utils'
 
 import type { Currencies } from '$lib/interfaces/invoiceStrings'
 
-import { parseJson } from '$lib/parseJson.js'
+import { parseJson } from '$lib/json/parseJson.js'
 
-import json from '$lib/jobs.json'
+import json from '$lib/json/jobs.json'
 
 export const locale = import.meta.env.VITE_CURRENT_LOCALE || 'nb-NO'
 

@@ -16,7 +16,7 @@ const returnRelevantRows = (json: XTRFjsonDefinition[]): Line[] => {
       date: parseDate(x.overview.deliveryDate),
       description:
         x.overview.sourceLanguage.symbol +
-        ' > ' +
+        ' → ' +
         x.overview.targetLanguages[0].symbol +
         '    ' +
         x.overview.idNumber,
