@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-  import IconPlus from './icons/IconPlus.svelte';
+  import { createEventDispatcher } from 'svelte'
+  import IconPlus from './icons/IconPlus.svelte'
 
-  export let title: string;
-  export let filterDescription: string;
+  export let title: string
+  export let filterDescription: string
 
-  const dispatch = createEventDispatcher<{ filter: string }>();
+  const dispatch = createEventDispatcher<{ filter: string }>()
 </script>
 
 <div class="root">
@@ -27,7 +27,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: var(--border-width) dashed var(--table-border-color);
+    border-bottom: var(--border-width) dashed
+      var(--table-border-color);
   }
 
   h2 {

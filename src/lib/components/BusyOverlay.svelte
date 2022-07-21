@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let enabled: boolean;
+  export let enabled: boolean
 </script>
 
 <div aria-busy={enabled} />
@@ -17,7 +17,7 @@
     pointer-events: none;
   }
   div[aria-busy='true'] {
-      background: rgba(black, 0.5);
-      pointer-events: initial;
+    background: rgba(black, 0.5);
+    pointer-events: initial;
   }
 </style>

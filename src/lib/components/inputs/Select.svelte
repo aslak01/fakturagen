@@ -1,30 +1,34 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import LabelAsterisk from './LabelAsterisk.svelte';
+  import { onMount } from 'svelte'
+  import LabelAsterisk from './LabelAsterisk.svelte'
 
-  type Option = { value: string; label: string };
+  type Option = { value: string; label: string }
 
-  export let label: string;
-  export let getOptions: () => Promise<Option[]>;
-  export let value = '';
-  export let required = false;
-  export let error: string | void;
+  export let label: string
+  export let getOptions: () => Promise<Option[]>
+  export let value = ''
+  export let required = false
+  export let error: string | void
 
-  let options: Option[] = [];
-  let loading = false;
+  let options: Option[] = []
+  let loading = false
 
   const load = async () => {
-    loading = true;
-    options = await getOptions();
-    loading = false;
-  };
+    loading = true
+    options = await getOptions()
+    loading = false
+  }
 
-  onMount(load);
+  onMount(load)
 </script>
 
 <label area-busy={loading}>
   {label}<LabelAsterisk {required} />
-  <select bind:value on:focus={load} aria-invalid={error ? 'true' : undefined}>
+  <select
+    bind:value
+    on:focus={load}
+    aria-invalid={error ? 'true' : undefined}
+  >
     <option value="">Select...</option>
     {#each options as { value, label } (value)}
       <option {value}>{label}</option>

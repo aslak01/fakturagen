@@ -1,37 +1,45 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-  import BusyOverlay from './BusyOverlay.svelte';
-  import DataTableHeader from './DataTableHeader.svelte';
-  import DataTableStatus from './DataTableStatus.svelte';
-  import IconDelete from './icons/IconDelete.svelte';
-  import IconDotsVertical from './icons/IconDotsVertical.svelte';
-  import IconEdit from './icons/IconEdit.svelte';
+  import { createEventDispatcher } from 'svelte'
+  import BusyOverlay from './BusyOverlay.svelte'
+  import DataTableHeader from './DataTableHeader.svelte'
+  import DataTableStatus from './DataTableStatus.svelte'
+  import IconDelete from './icons/IconDelete.svelte'
+  import IconDotsVertical from './icons/IconDotsVertical.svelte'
+  import IconEdit from './icons/IconEdit.svelte'
 
-  type T = $$Generic;
+  type T = $$Generic
 
-  export let title: string;
-  export let filterDescription: string;
-  export let loading: boolean;
-  export let items: T[];
-  export let key: keyof T;
-  export let columns: ({ title: string; textAlign?: 'center' | 'right' } & (
+  export let title: string
+  export let filterDescription: string
+  export let loading: boolean
+  export let items: T[]
+  export let key: keyof T
+  export let columns: ({
+    title: string
+    textAlign?: 'center' | 'right'
+  } & (
     | { prop: keyof T; render?: never }
     | { prop?: never; render: (item: T) => string | number }
-  ))[];
+  ))[]
 
   const dispatch = createEventDispatcher<{
-    add: never;
-    edit: { itemKey: unknown };
-    delete: { itemKey: unknown };
-  }>();
+    add: never
+    edit: { itemKey: unknown }
+    delete: { itemKey: unknown }
+  }>()
 
   const handleAddClick = () => {
-    dispatch('add');
-  };
+    dispatch('add')
+  }
 </script>
 
 <div class="root">
-  <DataTableHeader {title} on:click={handleAddClick} {filterDescription} on:filter />
+  <DataTableHeader
+    {title}
+    on:click={handleAddClick}
+    {filterDescription}
+    on:filter
+  />
   <table>
     <thead>
       <tr>
@@ -47,13 +55,23 @@
         <tr>
           <td class="number">{index + 1}</td>
           {#each columns as { prop, title, textAlign, render } (title)}
-            <td style:text-align={textAlign || 'left'}>{prop ? item[prop] : render?.(item)}</td>
+            <td style:text-align={textAlign || 'left'}
+              >{prop ? item[prop] : render?.(item)}</td
+            >
           {/each}
           <td class="actions">
-            <span class="action" on:click={() => dispatch('edit', { itemKey: item[key] })}>
+            <span
+              class="action"
+              on:click={() =>
+                dispatch('edit', { itemKey: item[key] })}
+            >
               <IconEdit />
             </span>
-            <span class="action danger" on:click={() => dispatch('delete', { itemKey: item[key] })}>
+            <span
+              class="action danger"
+              on:click={() =>
+                dispatch('delete', { itemKey: item[key] })}
+            >
               <IconDelete />
             </span>
           </td>

@@ -1,16 +1,17 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher } from 'svelte'
 
-  export let loading: boolean;
-  export let columnsLength: number;
-  export let itemsPluralName: string;
+  export let loading: boolean
+  export let columnsLength: number
+  export let itemsPluralName: string
 
-  const dispatch = createEventDispatcher<{ add: never }>();
+  const dispatch = createEventDispatcher<{ add: never }>()
 </script>
 
 <tr>
   <td colspan={columnsLength + 1}>
-    {#if loading}Loading...{:else}No {itemsPluralName} found.<br />Why don't you
+    {#if loading}Loading...{:else}No {itemsPluralName} found.<br />Why
+      don't you
       <!-- svelte-ignore a11y-missing-attribute -->
       <a on:click={() => dispatch('add')}>add one</a>?{/if}
   </td>

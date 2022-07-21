@@ -26,12 +26,6 @@
     font-size: 3em;
   }
 
-  p {
-    font-size: 0.75em;
-    letter-spacing: 1.1em;
-    text-indent: 0.9em;
-  }
-
   hr {
     width: 5em;
     margin: 1em auto -0.4em;

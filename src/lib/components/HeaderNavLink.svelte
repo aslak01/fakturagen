@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/stores'
 
-  export let to: string;
-  export let title: string;
+  export let to: string
+  export let title: string
 </script>
 
-<li><a class:active={$page.url.pathname === to} href={to}>{title}</a></li>
+<li>
+  <a class:active={$page.url.pathname === to} href={to}>{title}</a>
+</li>
 
 <style>
   li:not(:first-child) {

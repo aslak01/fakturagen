@@ -1,11 +1,11 @@
 <script lang="ts">
-  import LabelAsterisk from './LabelAsterisk.svelte';
+  import LabelAsterisk from './LabelAsterisk.svelte'
 
-  export let label: string;
-  export let required = false;
-  export let placeholder = '';
-  export let value: string;
-  export let error: string | void;
+  export let label: string
+  export let required = false
+  export let placeholder = ''
+  export let value: string
+  export let error: string | void
 </script>
 
 <label>
