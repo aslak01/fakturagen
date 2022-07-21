@@ -59,24 +59,27 @@ export default trpc
   .mutation('save', {
     input: z.object({
       uid: z.string().nullable(),
-      invoiceNo: z.string().max(50).transform(trim),
+      // invoiceNo: z.string().max(50).transform(trim),
+      invoiceNo: z.number(),
       companyId: z.string().min(1, 'Should be selected'),
-      date: z.string().refine(
-        (val) => {
-          try {
-            new Decimal(val)
-            return true
-          } catch {
-            return false
-          }
-        },
-        { message: 'Valid number required' }
-      ),
-      dueDate: z
-        .string()
-        .max(1000)
-        .transform(trim)
-        .transform(falsyToNull)
+      date: z.date(),
+      // date: z.string().refine(
+      //   (val) => {
+      //     try {
+      //       new Decimal(val)
+      //       return true
+      //     } catch {
+      //       return false
+      //     }
+      //   },
+      //   { message: 'Valid number required' }
+      // ),
+      dueDate: z.date()
+      // dueDate: z
+      //   .string()
+      //   .max(1000)
+      //   .transform(trim)
+      //   .transform(falsyToNull)
     }),
     resolve: ({ input: { uid, ...data } }) =>
       uid

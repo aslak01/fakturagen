@@ -7,12 +7,13 @@
   import trpc from '$lib/client/trpc'
   import DataTable from '$lib/components/DataTable.svelte'
   import Select from '$lib/components/inputs/Select.svelte'
-  import TextareaInput from '$lib/components/inputs/TextareaInput.svelte'
   import TextInput from '$lib/components/inputs/TextInput.svelte'
+  import DateInput from '$lib/components/inputs/DateInput.svelte'
   import ModalEditor from '$lib/components/ModalEditor.svelte'
   import type { Load } from '@sveltejs/kit'
   import { formatDistanceToNow } from 'date-fns'
   import debounce from 'debounce'
+  import { aMonthInTheFuture } from '$lib/utils'
 
   export const load: Load = async ({ fetch }) => {
     const invoices = await trpc(fetch).query('invoices:browse')
@@ -23,18 +24,18 @@
 <script lang="ts">
   type Invoice = InferMutationInput<'invoices:save'>
   type EditorErrors = {
-    invoiceNo: string
+    invoiceNo: number
     company: string
-    date?: string
-    dueDate?: string
+    date?: Date
+    dueDate?: Date
   } | void
 
   const newInvoice = (): Invoice => ({
     uid: null,
-    invoiceNo: '',
-    date: '',
-    dueDate: '',
-    companyId: ''
+    invoiceNo: null,
+    date: new Date(),
+    dueDate: new Date(aMonthInTheFuture()),
+    companyId: ''  
   })
 
   let loading = false
@@ -146,7 +147,7 @@
   on:save={handleEditorSave}
 >
   <TextInput
-    label="Title"
+    label="InvoicNo"
     required
     bind:value={invoice.invoiceNo}
     error={editorErrors?.invoiceNo}
@@ -159,16 +160,17 @@
       bind:value={invoice.companyId}
       error={editorErrors?.companyId}
     />
-    <TextInput
-      label="Price"
+    <DateInput
+      label="Date"
       required
       bind:value={invoice.date}
       error={editorErrors?.date}
     />
+    <DateInput
+      label="Due Date"
+      required
+      bind:value={invoice.dueDate}
+      error={editorErrors?.dueDate}
+    />
   </div>
-  <TextareaInput
-    label="Excerpt"
-    bind:value={invoice.dueDate}
-    error={editorErrors?.dueDate}
-  />
 </ModalEditor>
