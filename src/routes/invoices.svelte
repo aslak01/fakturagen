@@ -7,13 +7,22 @@
   import trpc from '$lib/client/trpc'
   import DataTable from '$lib/components/DataTable.svelte'
   import Select from '$lib/components/inputs/Select.svelte'
-  import TextInput from '$lib/components/inputs/TextInput.svelte'
+  // import TextInput from '$lib/components/inputs/TextInput.svelte'
   import DateInput from '$lib/components/inputs/DateInput.svelte'
+  import NumberInput from '$lib/components/inputs/NumberInput.svelte'
   import ModalEditor from '$lib/components/ModalEditor.svelte'
   import type { Load } from '@sveltejs/kit'
   import { formatDistanceToNow } from 'date-fns'
   import debounce from 'debounce'
   import { aMonthInTheFuture } from '$lib/utils'
+
+
+  import prismaClient from '$lib/server/prismaClient'
+
+  const getInvoiceNumber = async () => {
+    return await prismaClient.invoice.count() + 100
+  }
+  const invoiceNo: number = getInvoiceNumber()  
 
   export const load: Load = async ({ fetch }) => {
     const invoices = await trpc(fetch).query('invoices:browse')
@@ -24,18 +33,17 @@
 <script lang="ts">
   type Invoice = InferMutationInput<'invoices:save'>
   type EditorErrors = {
-    invoiceNo: number
+    invoiceNo: string
     company: string
-    date?: Date
-    dueDate?: Date
+    date?: string
+    dueDate?: string
   } | void
 
   const newInvoice = (): Invoice => ({
-    uid: null,
-    invoiceNo: null,
+    invoiceNo: Math.random() * 10,
     date: new Date(),
     dueDate: new Date(aMonthInTheFuture()),
-    companyId: ''  
+    companyId: ''
   })
 
   let loading = false
@@ -119,9 +127,9 @@
   title="Invoices"
   filterDescription="title or company"
   items={invoices}
-  key="uid"
+  key="invoiceNo"
   columns={[
-    { title: 'Title', prop: 'invoiceNo' },
+    { title: 'InvoiceNo', prop: 'invoiceNo' },
     {
       title: 'Company',
       render: ({ company: { name } }) => `${name}`
@@ -140,13 +148,13 @@
 />
 
 <ModalEditor
-  title={invoice.uid ? invoice.invoiceNo : 'New invoice'}
+  title={invoice.uid ? invoice.uid : 'New invoice'}
   visible={editorVisible}
   busy={editorBusy}
   on:close={handleEditorClose}
   on:save={handleEditorSave}
 >
-  <TextInput
+  <NumberInput
     label="InvoicNo"
     required
     bind:value={invoice.invoiceNo}

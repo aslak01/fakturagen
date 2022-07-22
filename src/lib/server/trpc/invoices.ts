@@ -1,19 +1,19 @@
 import prismaClient from '$lib/server/prismaClient'
-import { falsyToNull, trim } from '$lib/utils/zodTransformers'
+// import { falsyToNull, trim } from '$lib/utils/zodTransformers'
+// import { dateStringToIsoDate } from '$lib/utils/zodTransformers'
 import * as trpc from '@trpc/server'
-import Decimal from 'decimal.js'
+// import Decimal from 'decimal.js'
 import { z } from 'zod'
 
 export default trpc
   .router()
   .query('browse', {
-    input: z.string().optional(),
+    input: z.number().or(z.string()).optional(),
     resolve: ({ input }) =>
       prismaClient.invoice.findMany({
         select: {
-          uid: true,
-          companyId: true,
           invoiceNo: true,
+          companyId: true,
           company: { select: { name: true } },
           date: true,
           dueDate: true,
@@ -26,27 +26,27 @@ export default trpc
               OR: [{ company: { name: { contains: input } } }]
             }
           : undefined,
-        orderBy: [{ invoiceNo: 'asc' }]
+        orderBy: [{ invoiceNo: 'desc' }]
       })
   })
+
   .query('list', {
     resolve: () =>
       prismaClient.invoice.findMany({
         select: {
-          uid: true,
           invoiceNo: true,
           company: { select: { name: true } }
         },
-        orderBy: [{ invoiceNo: 'asc' }]
+        orderBy: [{ invoiceNo: 'desc' }]
       })
   })
+
   .query('read', {
-    input: z.string(),
-    resolve: ({ input: uid }) =>
+    input: z.number(),
+    resolve: ({ input: invoiceNo }) =>
       prismaClient.invoice.findUnique({
-        where: { uid },
+        where: { invoiceNo },
         select: {
-          uid: true,
           invoiceNo: true,
           companyId: true,
           date: true,
@@ -56,11 +56,10 @@ export default trpc
         }
       })
   })
+
   .mutation('save', {
     input: z.object({
-      uid: z.string().nullable(),
       // invoiceNo: z.string().max(50).transform(trim),
-      invoiceNo: z.number(),
       companyId: z.string().min(1, 'Should be selected'),
       date: z.date(),
       // date: z.string().refine(
@@ -81,19 +80,24 @@ export default trpc
       //   .transform(trim)
       //   .transform(falsyToNull)
     }),
-    resolve: ({ input: { uid, ...data } }) =>
-      uid
+
+    resolve: ({ input: { invoiceNo, ...data } }) =>
+      invoiceNo
         ? prismaClient.invoice.update({
             data,
-            where: { uid },
-            select: { uid: true }
+            where: { invoiceNo },
+            select: { invoiceNo: true }
           })
-        : prismaClient.invoice.create({ data, select: { uid: true } })
+        : prismaClient.invoice.create({
+            data,
+            select: { invoiceNo: true }
+          })
   })
+
   .mutation('delete', {
-    input: z.string(),
-    resolve: ({ input: uid }) =>
+    input: z.number(),
+    resolve: ({ input: invoiceNo }) =>
       prismaClient.invoice
-        .delete({ where: { uid } })
+        .delete({ where: { invoiceNo } })
         .then(() => undefined)
   })
