@@ -46,9 +46,8 @@ model Bank {
 }
 
 model Invoice {
-  uid         String @id @default(cuid())
+  invoiceNo   Int @id @unique @default(autoincrement())
   companyId   String
-  invoiceNo   Int @unique
   date        DateTime @default(now())
   dueDate     DateTime
   createdAt   DateTime @default(now())
@@ -59,11 +58,11 @@ model Invoice {
 
 model InvoiceLine {
   uid         String @id @default(cuid())
-  invoiceId   String
+  invoiceId   Int
   date        String
   description String
   price       String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  invoice     Invoice @relation(fields: [invoiceId], references: [uid])
+  invoice     Invoice @relation(fields: [invoiceId], references: [invoiceNo])
 }
