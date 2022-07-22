@@ -6,7 +6,7 @@
 
   export let visible: boolean
   export let busy: boolean
-  export let title: string
+  export let title: string | number
 
   const dispatch = createEventDispatcher<{
     save: never
