@@ -10,7 +10,7 @@
 <label>
   {label}<LabelAsterisk {required} />
   <input
-    type="date"
+  type="datetime-local"
     {required}
     aria-invalid={error ? 'true' : undefined}
     bind:value
