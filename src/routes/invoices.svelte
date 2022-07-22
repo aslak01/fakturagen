@@ -17,13 +17,6 @@
   import { aMonthInTheFuture } from '$lib/utils'
 
 
-  import prismaClient from '$lib/server/prismaClient'
-
-  const getInvoiceNumber = async () => {
-    return await prismaClient.invoice.count() + 100
-  }
-  const invoiceNo: number = getInvoiceNumber()  
-
   export const load: Load = async ({ fetch }) => {
     const invoices = await trpc(fetch).query('invoices:browse')
     return { props: { invoices } }
@@ -40,7 +33,6 @@
   } | void
 
   const newInvoice = (): Invoice => ({
-    invoiceNo: Math.random() * 10,
     date: new Date(),
     dueDate: new Date(aMonthInTheFuture()),
     companyId: ''
@@ -154,12 +146,6 @@
   on:close={handleEditorClose}
   on:save={handleEditorSave}
 >
-  <NumberInput
-    label="InvoicNo"
-    required
-    bind:value={invoice.invoiceNo}
-    error={editorErrors?.invoiceNo}
-  />
   <div class="grid">
     <Select
       label="Company"
