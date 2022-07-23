@@ -60,6 +60,7 @@ export default trpc
   .mutation('save', {
     input: z.object({
       // invoiceNo: z.string().max(50).transform(trim),
+      invoiceNo: z.number().or(z.undefined()),
       companyId: z.string().min(1, 'Should be selected'),
       date: z.date(),
       // date: z.string().refine(

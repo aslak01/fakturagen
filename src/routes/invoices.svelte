@@ -73,7 +73,7 @@
     editorVisible = true
   }
 
-  const handleEdit = async (e: CustomEvent<{ itemKey: string }>) => {
+  const handleEdit = async (e: CustomEvent<{ itemKey: number }>) => {
     editorErrors = undefined
     editorBusy = true
     editorVisible = true
@@ -83,7 +83,7 @@
   }
 
   const handleDelete = async (
-    e: CustomEvent<{ itemKey: string }>
+    e: CustomEvent<{ itemKey: number }>
   ) => {
     loading = true
     await trpc().mutation('invoices:delete', e.detail.itemKey)
@@ -140,13 +140,20 @@
 />
 
 <ModalEditor
-  title={invoice.uid ? invoice.uid : 'New invoice'}
+  title={invoice.invoiceNo ? invoice.invoiceNo : 'New invoice'}
   visible={editorVisible}
   busy={editorBusy}
   on:close={handleEditorClose}
   on:save={handleEditorSave}
 >
-  <div class="grid">
+<div class="grid">
+    {#if invoice.invoiceNo}
+      <NumberInput
+        label="Invoice number"
+        bind:value={invoice.invoiceNo} 
+        error={editorErrors?.invoiceNo}
+      />
+    {/if}
     <Select
       label="Company"
       required
