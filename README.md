@@ -24,11 +24,13 @@ pnpm run dev
 localhost:5173
 ```
 
+(npm or yarn should also work fine)
+
 ### Setting up the DB
 
 ```bash
 npx prisma generate
-npm prisma db push
+npx prisma db push
 ```
 
 If all went well, this should allow you to mess around with the non-PDF parts of the app.
