@@ -53,7 +53,7 @@ export const yourCompany = {
 export const invoiceMeta = {
   invoiceDate: parseDate(new Date()),
   dueDate: parseDate(new Date(aMonthInTheFuture())),
-  invoiceNumber: '19'
+  invoiceNumber: import.meta.env.VITE_YOUR_INVOICE_NUMBER || '1'
 }
 
 export const yourBank = {

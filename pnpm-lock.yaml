@@ -10,6 +10,7 @@ specifiers:
   '@trpc/client': ^9.26.2
   '@trpc/server': ^9.26.2
   '@types/debounce': ^1.2.1
+  '@types/file-saver': ^2.0.5
   '@types/node': ^18.0.6
   '@typescript-eslint/eslint-plugin': ^5.27.0
   '@typescript-eslint/parser': ^5.27.0
@@ -21,6 +22,7 @@ specifiers:
   eslint-plugin-prettier: ^4.2.1
   eslint-plugin-svelte: ^2.2.0
   eslint-plugin-svelte3: ^4.0.0
+  file-saver: ^2.0.5
   pdf-lib: ^1.17.1
   prettier: ^2.6.2
   prettier-plugin-svelte: ^2.7.0
@@ -43,6 +45,7 @@ dependencies:
   date-fns: 2.28.0
   debounce: 1.2.1
   decimal.js: 10.3.1
+  file-saver: 2.0.5
   pdf-lib: 1.17.1
   trpc-sveltekit: 2.2.1_@trpc+server@9.26.2
   trpc-transformer: 2.0.3
@@ -51,9 +54,10 @@ dependencies:
 devDependencies:
   '@playwright/test': 1.23.4
   '@rgossiaux/svelte-headlessui': 1.0.2_svelte@3.49.0
-  '@sveltejs/adapter-auto': 1.0.0-next.63
-  '@sveltejs/kit': 1.0.0-next.390_svelte@3.49.0+vite@3.0.0
+  '@sveltejs/adapter-auto': 1.0.0-next.64
+  '@sveltejs/kit': 1.0.0-next.399_svelte@3.49.0+vite@3.0.0
   '@types/debounce': 1.2.1
+  '@types/file-saver': 2.0.5
   '@types/node': 18.0.6
   '@typescript-eslint/eslint-plugin': 5.30.6_b7n364ggt6o4xlkgyoaww3ph3q
   '@typescript-eslint/parser': 5.30.6_he2ccbldppg44uulnyq4rwocfa
@@ -239,27 +243,27 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@sveltejs/adapter-auto/1.0.0-next.63:
-    resolution: {integrity: sha512-9KguXwROEJMyyoKrsizAilVSmtfWxEDn2Hbxk44SP8Kj5cgN7tFCxzbL2kmmqyV1CO1tOh5iNC2oWbyTfikXmw==}
+  /@sveltejs/adapter-auto/1.0.0-next.64:
+    resolution: {integrity: sha512-Q8DwcS6wl1GovzS9JJzaD/WL/Lfk1ur4nAF1HtmsUvZDpsPBVDqnK2AhYU4G3oFNiuHstrjAogMy5th8ptSFGw==}
     dependencies:
-      '@sveltejs/adapter-cloudflare': 1.0.0-next.30
-      '@sveltejs/adapter-netlify': 1.0.0-next.70
-      '@sveltejs/adapter-vercel': 1.0.0-next.65
+      '@sveltejs/adapter-cloudflare': 1.0.0-next.31
+      '@sveltejs/adapter-netlify': 1.0.0-next.71
+      '@sveltejs/adapter-vercel': 1.0.0-next.66
     transitivePeerDependencies:
       - encoding
       - supports-color
     dev: true
 
-  /@sveltejs/adapter-cloudflare/1.0.0-next.30:
-    resolution: {integrity: sha512-jIclgb58n3Uoo8TTudXSa7wmLP7Rn/ESLQS+zOUe0xsti5DG/eDhELTnSvkoSa2lJY21ym5rej/GSERRyeuBVw==}
+  /@sveltejs/adapter-cloudflare/1.0.0-next.31:
+    resolution: {integrity: sha512-HhEFZP72GJ8AZGgFECKIiayDcLaAWi65pI0AnBfiNhCifYSlH/mPNWNVD4AWRDnXnH6XU+FLwhGDnIDwytTyYg==}
     dependencies:
       '@cloudflare/workers-types': 3.14.1
       esbuild: 0.14.49
       worktop: 0.8.0-next.14
     dev: true
 
-  /@sveltejs/adapter-netlify/1.0.0-next.70:
-    resolution: {integrity: sha512-lIXY6KIgIFBz4+mdvilx9Ny8oFV7T2iVTKLirJayoI/SqPWGAcxklvWvjGfS4QT8rS9pWKDaKRUQM4M/gl8LlA==}
+  /@sveltejs/adapter-netlify/1.0.0-next.71:
+    resolution: {integrity: sha512-la1CGtWO1xul1L3zEoFAoc4EX2uxZjrZcOMS3tkKB8drxhbQsNbnTE6fmSSMFiZXhxaikczrBgQwqIaDkLTmZg==}
     dependencies:
       '@iarna/toml': 2.2.5
       esbuild: 0.14.49
@@ -267,20 +271,21 @@ packages:
       tiny-glob: 0.2.9
     dev: true
 
-  /@sveltejs/adapter-vercel/1.0.0-next.65:
-    resolution: {integrity: sha512-RV3HL7Ic7pGgIoBSHPwN1pBX96Km1X683oHImPHAKX9h/WOvJZ3bY5+IWNRcR8tx9rPB5gfMRg+msvPSBr3RVw==}
+  /@sveltejs/adapter-vercel/1.0.0-next.66:
+    resolution: {integrity: sha512-s3Hcxu9nCG/rR3C3cFbdQGjTa5W4K2kRcc6S5Xefx7itbrw+4v3KpO8ZPB6qM55XDwVxuG7260NMHVI6MUGmSA==}
     dependencies:
-      '@vercel/nft': 0.20.1
+      '@vercel/nft': 0.21.0
       esbuild: 0.14.49
     transitivePeerDependencies:
       - encoding
       - supports-color
     dev: true
 
-  /@sveltejs/kit/1.0.0-next.390_svelte@3.49.0+vite@3.0.0:
-    resolution: {integrity: sha512-BlWjFL7v1y2vIYHMYMwH2Iy49eOkaunQ8jElQ9qMlC2kp/IdP3uLulS12ZX3oOURxoJICB4gQ82uEyjxen/kdQ==}
+  /@sveltejs/kit/1.0.0-next.399_svelte@3.49.0+vite@3.0.0:
+    resolution: {integrity: sha512-svOZrpfFCkM0sXaPzbGK8YLtbndLzsWPXnUOdf1kwR+MAnoP7txnk7NOfwCScOHkRXMOzWzfeeOcbAHTW1KL0A==}
     engines: {node: '>=16.9'}
     hasBin: true
+    requiresBuild: true
     peerDependencies:
       svelte: ^3.44.0
       vite: ^3.0.0
@@ -333,6 +338,10 @@ packages:
 
   /@types/debounce/1.2.1:
     resolution: {integrity: sha512-epMsEE85fi4lfmJUH/89/iV/LI+F5CvNIvmgs5g5jYFPfhO2S/ae8WSsLOKWdwtoaZw9Q2IhJ4tQ5tFCcS/4HA==}
+    dev: true
+
+  /@types/file-saver/2.0.5:
+    resolution: {integrity: sha512-zv9kNf3keYegP5oThGLaPk8E081DFDuwfqjtiTzm6PoxChdJ1raSuADf2YGCVIyrSynLrgc8JWv296s7Q7pQSQ==}
     dev: true
 
   /@types/json-schema/7.0.11:
@@ -479,12 +488,13 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@vercel/nft/0.20.1:
-    resolution: {integrity: sha512-hSLcr64KHOkcNiTAlv154K4p4faEFBwYIi2eIgu1QCDhB1qyQYvFuEhtw3eaapNjA4/7x/2jcclfCAjILua/ag==}
+  /@vercel/nft/0.21.0:
+    resolution: {integrity: sha512-hFCAETfI5cG8l5iAiLhMC2bReC5K7SIybzrxGorv+eGspIbIFsVw7Vg85GovXm/LxA08pIDrAlrhR6GN36XB/Q==}
     hasBin: true
     dependencies:
       '@mapbox/node-pre-gyp': 1.0.9
       acorn: 8.7.1
+      async-sema: 3.1.1
       bindings: 1.5.0
       estree-walker: 2.0.2
       glob: 7.2.3
@@ -573,6 +583,10 @@ packages:
   /array-union/2.1.0:
     resolution: {integrity: sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==}
     engines: {node: '>=8'}
+    dev: true
+
+  /async-sema/3.1.1:
+    resolution: {integrity: sha512-tLRNUXati5MFePdAk8dw7Qt7DpxPB60ofAgn8WRhW6a2rcimZnYBP9oxHiv0OHy+Wz7kPMG+t4LGdt31+4EmGg==}
     dev: true
 
   /balanced-match/1.0.2:
@@ -1190,6 +1204,10 @@ packages:
     dependencies:
       flat-cache: 3.0.4
     dev: true
+
+  /file-saver/2.0.5:
+    resolution: {integrity: sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==}
+    dev: false
 
   /file-uri-to-path/1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}

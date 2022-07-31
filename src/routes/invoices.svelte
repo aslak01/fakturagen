@@ -16,7 +16,6 @@
   import debounce from 'debounce'
   import { aMonthInTheFuture } from '$lib/utils'
 
-
   export const load: Load = async ({ fetch }) => {
     const invoices = await trpc(fetch).query('invoices:browse')
     return { props: { invoices } }
@@ -27,7 +26,7 @@
   type Invoice = InferMutationInput<'invoices:save'>
   type EditorErrors = {
     invoiceNo: string
-    company: string
+    companyId: string
     date?: string
     dueDate?: string
   } | void
@@ -146,11 +145,11 @@
   on:close={handleEditorClose}
   on:save={handleEditorSave}
 >
-<div class="grid">
+  <div class="grid">
     {#if invoice.invoiceNo}
       <NumberInput
         label="Invoice number"
-        bind:value={invoice.invoiceNo} 
+        bind:value={invoice.invoiceNo}
         error={editorErrors?.invoiceNo}
       />
     {/if}
