@@ -6,6 +6,5 @@ node_modules
 .env
 .env.*
 !.env.example
-*.log
-static/fonts
-prisma/faktura.db
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
