@@ -27,6 +27,8 @@ localhost:5173
 ### Setting up the DB
 
 ```bash
+cp .env.example .env
+sqlite3 faktura.db "VACUUM;"
 npx prisma generate
 npx prisma db push
 ```
