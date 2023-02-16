@@ -24,8 +24,6 @@ pnpm run dev
 localhost:5173
 ```
 
-(npm or yarn should also work fine)
-
 ### Setting up the DB
 
 ```bash
