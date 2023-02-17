@@ -9,11 +9,14 @@
 	let pdf = {} as HTMLIFrameElement;
 	let pdfString = undefined as undefined | string;
 
-	const saveFile = () => {
-		const filename = `invoice_${invoiceMeta.invoiceNumber}_${yourCompany.name}`;
-		if (typeof pdfString === 'string') {
-			FileSaver.saveAs(pdfString, filename + '.pdf');
-		}
+	const saveFile = (
+		pdf: string | undefined,
+		meta: { invoiceNumber: string },
+		company: { name: string }
+	) => {
+		if (typeof pdf !== 'string') return;
+		const filename = `invoice_${meta.invoiceNumber}_${company.name}`;
+		FileSaver.saveAs(pdf, filename + '.pdf');
 	};
 
 	onMount(async () => {
@@ -30,7 +33,7 @@
 </script>
 
 {#if typeof pdfString !== 'undefined'}
-	<button on:click={() => saveFile()}>Save</button>
+	<button on:click={() => saveFile(pdfString, invoiceMeta, yourCompany)}>Save</button>
 {/if}
 <div class="preview" class:invisible={pdfNotGenerated}>
 	<iframe title="pdf" bind:this={pdf} style="width: 100%; height: 100%;" />
