@@ -69,8 +69,15 @@ export const randomDate = () =>
   new Date().getTime() -
   1000 * 3600 * 24 * Math.floor(Math.random() * 31)
 
-export const aMonthInTheFuture = () =>
-  new Date().getTime() + 1000 * 3600 * 24 * 30.5
+export const aMonthInTheFuture = (
+  lessThanAMonthFactor = 0,
+  moreThanAMonthFactor = 0
+) =>
+  new Date().getTime() +
+  1000 *
+    3600 *
+    24 *
+    (30.5 - lessThanAMonthFactor + moreThanAMonthFactor)
 
 export function isValidDate(date: Date) {
   return (
