@@ -13,15 +13,8 @@ An Sqlite backend managed by Prisma and trpc and administrated with a Svelte Kit
 ### Installation:
 
 ```bash
-Git clone
-
-cd clone
-
 pnpm i
-
 pnpm run dev
-
-localhost:5173
 ```
 
 ### Setting up the DB
