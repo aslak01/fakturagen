@@ -10,59 +10,73 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Settings {
-  locale      String @id
+model Meta {
+  uid        String  @id @default(cuid())
+  locale     String
+  vatEnabled Boolean
+  vatRate    Int
+  companyId  String  @unique
+  company    Company @relation(fields: [companyId], references: [uid])
 }
 
-model Vat {
-  uid         String @id @default(cuid())
-  enabled     Boolean
-  rate        Int
+model Address {
+  uid       String   @id @default(cuid())
+  companyId String   @unique
+  company   Company  @relation(fields: [companyId], references: [uid])
+  street    String
+  poNo      String
+  city      String
+  country   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Company {
-  uid         String @id @default(cuid())
-  ownCompany  Boolean @default(false)
-  name        String
-  orgNo       String
-  street      String
-  poNo        String
-  city        String
-  currency    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  banks       Bank[]
-  invoices    Invoice[]
+  uid       String    @id @default(cuid())
+  name      String
+  addressId String?   @unique
+  address   Address?
+  currency  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  banks     Bank[]
+  invoices  Invoice[]
+  Meta      Meta?
 }
 
 model Bank {
-  uid         String @id @default(cuid())
-  companyId   String
-  accno       String
-  iban        String
-  bic         String
-  bank        String
-  company     Company @relation(fields: [companyId], references: [uid])
+  uid       String  @id @default(cuid())
+  accno     String
+  iban      String
+  bic       String
+  name      String
+  companyId String  @unique
+  company   Company @relation(fields: [companyId], references: [uid])
 }
 
 model Invoice {
-  invoiceNo   Int @id @unique @default(autoincrement())
-  companyId   String
-  date        DateTime @default(now())
-  dueDate     DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  lines       InvoiceLine[]
-  company     Company @relation(fields: [companyId], references: [uid])
+  number    Int           @unique
+  uid       String        @id @default(cuid())
+  companyId String
+  date      DateTime      @default(now())
+  dueDate   DateTime
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  lines     InvoiceLine[]
+  company   Company       @relation(fields: [companyId], references: [uid])
 }
 
 model InvoiceLine {
-  uid         String @id @default(cuid())
-  invoiceId   Int
-  date        String
-  description String
-  price       String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  invoice     Invoice @relation(fields: [invoiceId], references: [invoiceNo])
+  uid                    String   @id @default(cuid())
+  date                   String
+  description            String
+  value                  Int
+  currency               String
+  currValueAtInvoiceTime Int
+  hasVat                 Boolean  @default(true)
+  vatSum                 Int
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  invoiceId              String   @unique
+  invoice                Invoice  @relation(fields: [invoiceId], references: [uid])
 }
