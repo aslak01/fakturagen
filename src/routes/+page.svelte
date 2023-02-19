@@ -33,7 +33,9 @@
 </script>
 
 {#if typeof pdfString !== 'undefined'}
-	<button on:click={() => saveFile(pdfString, invoiceMeta, yourCompany)}>Save</button>
+	<button on:click={() => saveFile(pdfString, invoiceMeta, yourCompany)}
+		>Save</button
+	>
 {/if}
 <div class="preview" class:invisible={pdfNotGenerated}>
 	<iframe title="pdf" bind:this={pdf} style="width: 100%; height: 100%;" />

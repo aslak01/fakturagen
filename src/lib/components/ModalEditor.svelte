@@ -51,7 +51,11 @@
 					class="secondary"
 					on:click|preventDefault={handleCancelClick}>Cancel</a
 				>
-				<a href="#save" role="button" on:click|preventDefault={() => dispatch('save')}>Save</a>
+				<a
+					href="#save"
+					role="button"
+					on:click|preventDefault={() => dispatch('save')}>Save</a
+				>
 			</footer>
 			<BusyOverlay enabled={busy} />
 		</article>

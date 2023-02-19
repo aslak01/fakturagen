@@ -4,8 +4,8 @@ import { t } from '$lib/trpc/t';
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
 
 export const router = t.router({
-  companies,
-  invoices
+	companies,
+	invoices
 });
 
 export type Router = typeof router;

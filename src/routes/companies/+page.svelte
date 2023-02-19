@@ -136,11 +136,36 @@
 	on:save={handleEditorSave}
 >
 	<div class="grid">
-		<TextInput label="Name" required bind:value={company.name} error={editorErrors?.name} />
-		<TextInput label="orgNo" required bind:value={company.orgNo} error={editorErrors?.orgNo} />
-		<TextInput label="street" required bind:value={company.street} error={editorErrors?.street} />
-		<TextInput label="poNo" required bind:value={company.poNo} error={editorErrors?.poNo} />
-		<TextInput label="city" required bind:value={company.city} error={editorErrors?.city} />
+		<TextInput
+			label="Name"
+			required
+			bind:value={company.name}
+			error={editorErrors?.name}
+		/>
+		<TextInput
+			label="orgNo"
+			required
+			bind:value={company.orgNo}
+			error={editorErrors?.orgNo}
+		/>
+		<TextInput
+			label="street"
+			required
+			bind:value={company.street}
+			error={editorErrors?.street}
+		/>
+		<TextInput
+			label="poNo"
+			required
+			bind:value={company.poNo}
+			error={editorErrors?.poNo}
+		/>
+		<TextInput
+			label="city"
+			required
+			bind:value={company.city}
+			error={editorErrors?.city}
+		/>
 		<TextInput
 			label="currency"
 			required
