@@ -11,74 +11,83 @@ datasource db {
 }
 
 model Meta {
-  uid        String  @id @default(cuid())
+  uid       String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  company   Company  @relation(fields: [companyId], references: [uid])
+  companyId String   @unique
+
   locale     String
   vatEnabled Boolean
   vatRate    Int
-  companyId  String  @unique
-  company    Company @relation(fields: [companyId], references: [uid])
 }
 
 model Address {
   uid       String   @id @default(cuid())
-  companyId String   @unique
-  company   Company  @relation(fields: [companyId], references: [uid])
-  street    String
-  poNo      String
-  city      String
-  country   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  company   Company  @relation(fields: [companyId], references: [uid])
+  companyId String   @unique
+
+  street  String
+  poNo    String
+  city    String
+  country String
 }
 
 model Company {
-  uid       String    @id @default(cuid())
-  name      String
-  addressId String?   @unique
-  address   Address?
-  currency  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  banks     Bank[]
-  invoices  Invoice[]
-  Meta      Meta?
+  uid       String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String
+  currency String
+  banks    Bank[]
+  invoices Invoice[]
+  address  Address?
+  Meta     Meta?
 }
 
 model Bank {
-  uid       String  @id @default(cuid())
-  accno     String
-  iban      String
-  bic       String
-  name      String
-  companyId String  @unique
-  company   Company @relation(fields: [companyId], references: [uid])
+  uid       String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  company   Company  @relation(fields: [companyId], references: [uid])
+  companyId String   @unique
+
+  accno String
+  iban  String
+  bic   String
+  name  String
 }
 
 model Invoice {
-  uid                    String        @id @default(cuid())
-  createdAt              DateTime      @default(now())
-  updatedAt              DateTime      @updatedAt
-  number                 Int           @unique
-  lines                  InvoiceLine[]
-  date                   DateTime      @default(now())
-  dueDate                DateTime
-  company                Company       @relation(fields: [companyId], references: [uid])
-  companyId              String
-  paid                   Boolean
-  sumPaid                Int
-  currValueAtInvoiceTime Int?
+  uid       String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  company   Company  @relation(fields: [companyId], references: [uid])
+  companyId String
+
+  number    Int           @unique
+  date      DateTime      @default(now())
+  dueDate   DateTime
+  lines     InvoiceLine[]
+  paid      Boolean
+  sumPaid   Int
+  currValue Float?
 }
 
 model InvoiceLine {
-  uid         String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  uid       String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  invoice   Invoice  @relation(fields: [invoiceId], references: [uid])
+  invoiceId String   @unique
+
   doneDate    String?
   description String
-  value       Int
+  value       Float
   currency    String?
-  hasVat      Boolean  @default(true)
-  vatAmt      Int?
-  invoice     Invoice  @relation(fields: [invoiceId], references: [uid])
-  invoiceId   String   @unique
+  hasVat      Boolean @default(true)
+  vatAmt      Float?
 }
