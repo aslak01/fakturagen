@@ -55,28 +55,30 @@ model Bank {
 }
 
 model Invoice {
-  number    Int           @unique
-  uid       String        @id @default(cuid())
-  companyId String
-  date      DateTime      @default(now())
-  dueDate   DateTime
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  lines     InvoiceLine[]
-  company   Company       @relation(fields: [companyId], references: [uid])
+  uid                    String        @id @default(cuid())
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+  number                 Int           @unique
+  lines                  InvoiceLine[]
+  date                   DateTime      @default(now())
+  dueDate                DateTime
+  company                Company       @relation(fields: [companyId], references: [uid])
+  companyId              String
+  paid                   Boolean
+  sumPaid                Int
+  currValueAtInvoiceTime Int?
 }
 
 model InvoiceLine {
-  uid                    String   @id @default(cuid())
-  date                   String
-  description            String
-  value                  Int
-  currency               String
-  currValueAtInvoiceTime Int
-  hasVat                 Boolean  @default(true)
-  vatSum                 Int
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
-  invoiceId              String   @unique
-  invoice                Invoice  @relation(fields: [invoiceId], references: [uid])
+  uid         String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  doneDate    String?
+  description String
+  value       Int
+  currency    String?
+  hasVat      Boolean  @default(true)
+  vatAmt      Int?
+  invoice     Invoice  @relation(fields: [invoiceId], references: [uid])
+  invoiceId   String   @unique
 }

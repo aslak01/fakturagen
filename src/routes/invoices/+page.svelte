@@ -154,7 +154,12 @@
 			bind:value={invoice.companyId}
 			error={editorErrors?.companyId}
 		/>
-		<DateInput label="Date" required bind:value={invoice.date} error={editorErrors?.date} />
+		<DateInput
+			label="Date"
+			required
+			bind:value={invoice.date}
+			error={editorErrors?.date}
+		/>
 		<DateInput
 			label="Due Date"
 			required
