@@ -1,19 +1,27 @@
 import { PrismaClient } from '@prisma/client'
-import { aMonthInTheFuture } from '../src/lib/utils/index'
+import { md5 } from 'hash-wasm'
+const aMonthInTheFuture = (
+  lessThanAMonthFactor = 0,
+  moreThanAMonthFactor = 0
+) =>
+  new Date().getTime() +
+  1000 * 3600 * 24 * (30.5 - lessThanAMonthFactor + moreThanAMonthFactor);
 const prisma = new PrismaClient()
 
 async function main() {
-  await prisma.user.deleteMany()
-  await prisma.meta.deleteMany()
-  await prisma.address.deleteMany()
-  await prisma.company.deleteMany()
-  await prisma.bank.deleteMany()
-  await prisma.invoice.deleteMany()
-  await prisma.invoiceLine.deleteMany()
+  await prisma.user.deleteMany({})
+  await prisma.meta.deleteMany({})
+  await prisma.address.deleteMany({})
+  await prisma.company.deleteMany({})
+  await prisma.bank.deleteMany({})
+  await prisma.invoice.deleteMany({})
+  await prisma.invoiceLine.deleteMany({})
 
   await prisma.user.create({
     data: {
       name: "Test Bruker",
+      email: "demo@notreal.email",
+      passwordHash: await md5('demo'),
       company: {
         create: {
           name: "Test Firma",
@@ -63,7 +71,7 @@ async function main() {
           {
             number: 1234,
             date: new Date(),
-            dueDate: aMonthInTheFuture(),
+            dueDate: new Date(aMonthInTheFuture()),
             paid: true,
             sumPaid: 1234,
             currValue: 3.14,

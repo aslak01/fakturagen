@@ -11,19 +11,20 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id        String   @id @unique @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  company   Company? @relation(fields: [companyId], references: [id])
-  companyId String?  @unique
+  company   Company?
   meta      Meta?    @relation(fields: [metaId], references: [id])
   metaId    String?  @unique
 
-  name String
+  name         String
+  email        String @unique
+  passwordHash String
 }
 
 model Meta {
-  id        String   @id @default(cuid())
+  id        String   @id @unique @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   company   Company  @relation(fields: [companyId], references: [id])
@@ -36,7 +37,7 @@ model Meta {
 }
 
 model Address {
-  id        String   @id @default(cuid())
+  id        String   @id @unique @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   company   Company  @relation(fields: [companyId], references: [id])
@@ -49,10 +50,11 @@ model Address {
 }
 
 model Company {
-  id        String   @id @default(cuid())
+  id        String   @id @unique @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User?
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?  @unique
 
   name     String
   currency String
@@ -63,10 +65,10 @@ model Company {
 }
 
 model Bank {
-  id        String   @id @default(cuid())
+  id        String   @id @unique @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  company   Company  @relation(fields: [companyId], references: [id])
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String   @unique
 
   accno String
@@ -76,13 +78,13 @@ model Bank {
 }
 
 model Invoice {
-  id        String   @id @default(cuid())
+  id        String   @id @unique @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  company   Company  @relation(fields: [companyId], references: [id])
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String
 
-  number    Int           @unique
+  number    Int
   date      DateTime      @default(now())
   dueDate   DateTime
   lines     InvoiceLine[]
@@ -92,11 +94,11 @@ model Invoice {
 }
 
 model InvoiceLine {
-  id        String   @id @default(cuid())
+  id        String   @id @unique @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  invoice   Invoice  @relation(fields: [invoiceId], references: [id])
-  invoiceId String   @unique
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId String
 
   doneDate    DateTime?
   description String
