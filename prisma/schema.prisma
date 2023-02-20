@@ -10,12 +10,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Meta {
-  uid       String   @id @default(cuid())
+model User {
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  company   Company  @relation(fields: [companyId], references: [uid])
+  company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?  @unique
+  meta      Meta?    @relation(fields: [metaId], references: [id])
+  metaId    String?  @unique
+
+  name String
+}
+
+model Meta {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  company   Company  @relation(fields: [companyId], references: [id])
   companyId String   @unique
+  user      User?
 
   locale     String
   vatEnabled Boolean
@@ -23,10 +36,10 @@ model Meta {
 }
 
 model Address {
-  uid       String   @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  company   Company  @relation(fields: [companyId], references: [uid])
+  company   Company  @relation(fields: [companyId], references: [id])
   companyId String   @unique
 
   street  String
@@ -36,23 +49,24 @@ model Address {
 }
 
 model Company {
-  uid       String   @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User?
 
   name     String
   currency String
-  banks    Bank[]
+  bank     Bank?
   invoices Invoice[]
   address  Address?
-  Meta     Meta?
+  meta     Meta?
 }
 
 model Bank {
-  uid       String   @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  company   Company  @relation(fields: [companyId], references: [uid])
+  company   Company  @relation(fields: [companyId], references: [id])
   companyId String   @unique
 
   accno String
@@ -62,10 +76,10 @@ model Bank {
 }
 
 model Invoice {
-  uid       String   @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  company   Company  @relation(fields: [companyId], references: [uid])
+  company   Company  @relation(fields: [companyId], references: [id])
   companyId String
 
   number    Int           @unique
@@ -73,21 +87,21 @@ model Invoice {
   dueDate   DateTime
   lines     InvoiceLine[]
   paid      Boolean
-  sumPaid   Int
+  sumPaid   Float?
   currValue Float?
 }
 
 model InvoiceLine {
-  uid       String   @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  invoice   Invoice  @relation(fields: [invoiceId], references: [uid])
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id])
   invoiceId String   @unique
 
-  doneDate    String?
+  doneDate    DateTime?
   description String
   value       Float
   currency    String?
-  hasVat      Boolean @default(true)
+  hasVat      Boolean   @default(true)
   vatAmt      Float?
 }
