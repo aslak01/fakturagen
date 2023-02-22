@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./faktura.db"
 }
 
 model User {
@@ -57,7 +57,8 @@ model Company {
   userId    String?  @unique
 
   name     String
-  currency String
+  orgNo    String?
+  currency String?
   bank     Bank?
   invoices Invoice[]
   address  Address?
@@ -84,12 +85,12 @@ model Invoice {
   company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String
 
-  number    Int
+  number    Int           @unique
   date      DateTime      @default(now())
   dueDate   DateTime
   lines     InvoiceLine[]
   paid      Boolean
-  sumPaid   Float?
+  sum       Float?
   currValue Float?
 }
 

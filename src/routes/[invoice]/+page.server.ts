@@ -5,5 +5,5 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async (event) => ({
   invoices: router
     .createCaller(await createContext(event))
-    .invoice.list(event.url.searchParams.get('q') || undefined)
+    .invoices.list(event.url.searchParams.get('q') || undefined)
 });

@@ -1,100 +1,73 @@
-<script context="module" lang="ts">
-	import getEditorErrors from '$lib/client/getEditorErrors';
-	import type { InferMutationInput, InferQueryOutput } from '$lib/client/trpc';
-	import trpc from '$lib/client/trpc';
+<script lang="ts">
+	import { invalidateAll } from '$app/navigation';
+	import AuthorizationAlert from '$lib/components/AuthorizationAlert.svelte';
 	import DataTable from '$lib/components/DataTable.svelte';
 	// import TextareaInput from '$lib/components/inputs/TextareaInput.svelte';
 	import TextInput from '$lib/components/inputs/TextInput.svelte';
 	import ModalEditor from '$lib/components/ModalEditor.svelte';
-	import type { Load } from '@sveltejs/kit';
-	import { formatDistanceToNow } from 'date-fns';
-	import debounce from 'debounce';
+	import { savable } from '$lib/savable';
+	import { trpc } from '$lib/trpc/client';
+	import type { RouterInputs } from '$lib/trpc/router';
+	import { TRPCClientError } from '@trpc/client';
+	import type { PageData } from './$types';
 
-	export const load: Load = async ({ fetch }) => {
-		const companies = await trpc(fetch).query('companies:browse');
-		return { props: { companies } };
-	};
-</script>
+	export let data: PageData;
 
-<script lang="ts">
-	type company = InferMutationInput<'companies:save'>;
-	type EditorErrors = {
-		name?: string;
-		orgNo?: string;
-		street?: string;
-		poNo?: string;
-		city?: string;
-		currency?: string;
-	} | void;
+	let busy = false;
+	let item: RouterInputs['companies']['save'] | null = null;
+	let errors: { message: string; path: string[] }[] | null = null;
+	let needsAuthorization = false;
 
-	const newCompany = (): company => ({
-		uid: '',
-		ownCompany: false,
-		name: '',
-		orgNo: '',
-		street: '',
-		poNo: '',
-		city: '',
-		currency: ''
-	});
-
-	let loading = false;
-	let query = '';
-	export let companies: InferQueryOutput<'companies:browse'> = [];
-	let company = newCompany();
-	let editorErrors: EditorErrors;
-	let editorVisible = false;
-	let editorBusy = false;
-
-	const reloadCompanies = async () => {
-		loading = true;
-		companies = await trpc().query('companies:browse', query);
-		loading = false;
-	};
-
-	const handleFilter = debounce((e: CustomEvent<string>) => {
-		query = e.detail;
-		reloadCompanies();
-	}, 500);
-
-	const handleAdd = () => {
-		company = newCompany();
-		editorErrors = undefined;
-		editorVisible = true;
-	};
-
-	const handleEdit = async (e: CustomEvent<{ itemKey: string }>) => {
-		editorErrors = undefined;
-		editorBusy = true;
-		editorVisible = true;
-		const data = await trpc().query('companies:read', e.detail.itemKey);
-		if (data) company = { ...data, orgNo: data.orgNo || '' };
-		editorBusy = false;
-	};
-
-	const handleDelete = async (e: CustomEvent<{ itemKey: string }>) => {
-		loading = true;
-		await trpc().mutation('companies:delete', e.detail.itemKey);
-		reloadCompanies();
-	};
-
-	const handleEditorClose = () => {
-		editorVisible = false;
-		company = newCompany();
-		editorErrors = undefined;
-	};
-
-	const handleEditorSave = async () => {
-		editorBusy = true;
-		try {
-			await trpc().mutation('companies:save', company);
-			editorVisible = false;
-			company = newCompany();
-			reloadCompanies();
-		} catch (err) {
-			editorErrors = getEditorErrors(err);
+	const ioCheckAuth = () => {
+		if (!data.isAuthenticated) {
+			needsAuthorization = true;
+			return;
 		}
-		editorBusy = false;
+	};
+
+	const handleAdd = async () => {
+		ioCheckAuth();
+		item = { id: null, name: '', currency: '' };
+	};
+
+	const handleEdit = async (e: CustomEvent<string>) => {
+		ioCheckAuth();
+		busy = true;
+		item = await trpc().companies.load.query(e.detail);
+		busy = false;
+	};
+
+	const handleDelete = async (e: CustomEvent<string>) => {
+		ioCheckAuth();
+		busy = true;
+		await trpc().companies.delete.mutate(e.detail);
+		await invalidateAll();
+		busy = false;
+	};
+
+	const handleCancel = () => {
+		item = null;
+		errors = null;
+	};
+
+	const handleSave = async (e: {
+		detail: RouterInputs['companies']['save'];
+	}) => {
+		ioCheckAuth();
+		busy = true;
+		try {
+			await trpc().companies.save.mutate(savable(e.detail));
+			item = null;
+			await invalidateAll();
+		} catch (err) {
+			if (err instanceof TRPCClientError) {
+				errors = JSON.parse(err.message);
+			} else {
+				throw err;
+			}
+		} finally {
+			busy = false;
+		}
 	};
 </script>
 
@@ -103,75 +76,39 @@
 </svelte:head>
 
 <DataTable
-	{loading}
+	{busy}
 	title="Companies"
-	filterDescription="first or last name"
-	items={companies}
-	key="uid"
+	items={data.companies}
 	columns={[
-		{ title: 'Name', prop: 'name' },
-		{ title: 'Organisation number', prop: 'orgNo' },
+		{ title: 'Name', grow: true, accessor: (company) => company.name },
 		{
-			title: 'Invoices',
-			textAlign: 'right',
-			render: (company) => company._count.invoices
+			title: 'Organisation number',
+			accessor: (company) => (company.orgNo ? company.orgNo : 'ukjent')
 		},
 		{
-			title: 'Last updated',
-			textAlign: 'right',
-			render: ({ updatedAt }) => formatDistanceToNow(updatedAt) + ' ago'
+			title: 'Invoices',
+			align: 'right',
+			render: (company) => company._count.invoices
 		}
 	]}
-	on:filter={handleFilter}
 	on:add={handleAdd}
 	on:edit={handleEdit}
 	on:delete={handleDelete}
 />
 
 <ModalEditor
-	title={company.uid ? `${company.name} ${company.orgNo}` : 'New company'}
-	visible={editorVisible}
-	busy={editorBusy}
-	on:close={handleEditorClose}
-	on:save={handleEditorSave}
+	{item}
+	itemName="company"
+	on:cancel={handleCancel}
+	on:save={handleSave}
 >
 	<div class="grid">
-		<TextInput
-			label="Name"
-			required
-			bind:value={company.name}
-			error={editorErrors?.name}
-		/>
-		<TextInput
-			label="orgNo"
-			required
-			bind:value={company.orgNo}
-			error={editorErrors?.orgNo}
-		/>
-		<TextInput
-			label="street"
-			required
-			bind:value={company.street}
-			error={editorErrors?.street}
-		/>
-		<TextInput
-			label="poNo"
-			required
-			bind:value={company.poNo}
-			error={editorErrors?.poNo}
-		/>
-		<TextInput
-			label="city"
-			required
-			bind:value={company.city}
-			error={editorErrors?.city}
-		/>
-		<TextInput
-			label="currency"
-			required
-			bind:value={company.currency}
-			error={editorErrors?.currency}
-		/>
+		<TextInput name="name" label="name" required {errors} {item} />
 	</div>
-	<!-- <TextareaInput label="street" bind:value={company.street} error={editorErrors?.street} /> -->
+	<TextInput name="orgNo" label="orgNo" required {errors} {item} />
 </ModalEditor>
+
+<AuthorizationAlert
+	visible={needsAuthorization}
+	on:close={() => (needsAuthorization = false)}
+/>

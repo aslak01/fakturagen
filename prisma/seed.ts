@@ -26,6 +26,7 @@ async function main() {
         create: {
           name: "Test Firma",
           currency: "NOK",
+          orgNo: '123123123',
           bank: {
             create: {
               accno: '123412341234',
@@ -73,7 +74,7 @@ async function main() {
             date: new Date(),
             dueDate: new Date(aMonthInTheFuture()),
             paid: true,
-            sumPaid: 1234,
+            sum: 1234,
             currValue: 3.14,
             lines: {
               create: [

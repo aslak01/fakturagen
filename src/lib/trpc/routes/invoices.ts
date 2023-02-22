@@ -20,7 +20,7 @@ export const invoices = t.router({
             updatedAt: true,
             lines: true,
             paid: true,
-            sumPaid: true,
+            sum: true,
             currValue: true
           },
           orderBy: { number: 'desc' },
@@ -59,10 +59,13 @@ export const invoices = t.router({
     .use(logger)
     .input(
       z.object({
-        invoiceNo: z.number().nullable(),
+        number: z.number().nullable(),
         companyId: z.string().min(1, 'Should be selected'),
         date: z.date(),
-        dueDate: z.date()
+        dueDate: z.date(),
+        paid: z.boolean(),
+        sum: z.number().nullable()
+
         // title: z.string(),
         // // price: z.custom<DecimalJsLike>(),
         // price: z.string(),
@@ -71,24 +74,24 @@ export const invoices = t.router({
         // storeIds: z.array(z.string())
       })
     )
-    .mutation(async ({ input: { invoiceNo, ...rest } }) => {
-      if (invoiceNo) {
-        await prisma.invoice.update({
-          data: {
-            ...rest,
-            stores: { connect: storeIds.map((id) => ({ id })) },
-            updatedByUserId: userId
-          },
-          where: { id }
-        });
+    .mutation(async ({ input: { number, ...rest } }) => {
+      if (number) {
+        // await prisma.invoice.update({
+        //   data: {
+        //     ...rest,
+        //     stores: { connect: storeIds.map((id) => ({ id })) },
+        //     updatedByUserId: userId
+        //   },
+        //   where: { id }
+        // });
       } else {
-        await prisma.book.create({
-          data: {
-            ...rest,
-            stores: { connect: storeIds.map((id) => ({ id })) },
-            updatedByUserId: userId
-          }
-        });
+        // await prisma.book.create({
+        //   data: {
+        //     ...rest,
+        //     stores: { connect: storeIds.map((id) => ({ id })) },
+        //     updatedByUserId: userId
+        //   }
+        // });
       }
     }),
 
@@ -97,6 +100,6 @@ export const invoices = t.router({
     .use(auth) // 👈 use auth middleware
     .input(z.string())
     .mutation(async ({ input: id }) => {
-      await prisma.book.delete({ where: { id } });
+      await prisma.invoice.delete({ where: { id } });
     })
 });

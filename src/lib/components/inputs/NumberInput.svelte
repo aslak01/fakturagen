@@ -1,26 +1,38 @@
 <script lang="ts">
 	import LabelAsterisk from './LabelAsterisk.svelte';
 
+	export let step = 1;
+	export let name: string;
 	export let label: string;
 	export let required = false;
-	export let value: number;
-	export let error: string | void;
+	export let placeholder = '';
+	export let item: Record<string, unknown> | null;
+	export let errors: { message: string; path: string[] }[] | null = null;
+
+	$: error = errors?.find((e) => e.path.includes(name));
 </script>
 
 <label>
 	{label}<LabelAsterisk {required} />
 	<input
 		type="number"
+		{step}
+		{name}
+		{placeholder}
 		{required}
+		value={item?.[name] || ''}
 		aria-invalid={error ? 'true' : undefined}
-		bind:value
 	/>
 	{#if error}
-		<small>{error}</small>
+		<small>{error.message}</small>
 	{/if}
 </label>
 
 <style>
+	input {
+		margin-bottom: 0.5em;
+	}
+
 	small {
 		color: var(--form-element-invalid-active-border-color);
 	}
