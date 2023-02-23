@@ -11,24 +11,6 @@
 		rel="stylesheet"
 		href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
 	/>
-	<style>
-		html,
-		body,
-		body > div {
-			height: 100%;
-		}
-
-		body > div {
-			display: flex;
-			flex-direction: column;
-		}
-
-		svg.icon {
-			width: 24px;
-			height: 24px;
-			vertical-align: text-bottom;
-		}
-	</style>
 </svelte:head>
 
 <Header isAuthenticated={data.isAuthenticated} />

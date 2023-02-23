@@ -34,7 +34,8 @@
 	}
 
 	h1 {
-		font-size: 3em;
+		font-size: 1.2em;
+		margin-block: unset;
 	}
 
 	hr {
