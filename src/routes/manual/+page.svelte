@@ -1,9 +1,7 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	import { drawPdf } from '$lib/pdf/pdfDoc';
 	import FileSaver from 'file-saver';
-	export let data: PageData;
 
 	import { invoiceMeta, yourCompany } from '$lib/constants/strings';
 
@@ -34,20 +32,9 @@
 	});
 </script>
 
-Du er {data.isAuthenticated ? '' : 'ikke'} logget inn, {data.userName
-	? data.userName
-	: ''}.
-{#if data.isAuthenticated}
-	<a href="/logout">Klikk her for å logge ut</a>
-{:else}
-	<a href="/login">Klikk her for å logge inn</a>
-{/if}
-
-{#if typeof pdfString !== 'undefined'}
-	<button on:click={() => saveFile(pdfString, invoiceMeta, yourCompany)}
-		>Save</button
-	>
-{/if}
+<button on:click={() => saveFile(pdfString, invoiceMeta, yourCompany)}
+	>Save</button
+>
 <div class="preview" class:invisible={pdfNotGenerated}>
 	<iframe title="pdf" bind:this={pdf} style="width: 100%; height: 100%;" />
 </div>
