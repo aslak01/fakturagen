@@ -3,6 +3,7 @@ import { auth } from '$lib/trpc/middleware/auth';
 import { logger } from '$lib/trpc/middleware/logger';
 import { t } from '$lib/trpc/t';
 import { z } from 'zod';
+import { aMonthInTheFuture } from '$lib/utils';
 
 export const invoices = t.router({
   list: t.procedure
@@ -67,16 +68,9 @@ export const invoices = t.router({
         number: z.number(),
         companyId: z.string().min(1, 'Should be selected'),
         date: z.date().or(z.string()),
-        dueDate: z.date().or(z.string()),
+        dueDate: z.date().or(z.string()).default(new Date(aMonthInTheFuture())),
         paid: z.boolean(),
         sum: z.number().nullable()
-
-        // title: z.string(),
-        // // price: z.custom<DecimalJsLike>(),
-        // price: z.string(),
-        // excerpt: z.string().nullable(),
-        // authorId: z.string(),
-        // storeIds: z.array(z.string())
       })
     )
     .mutation(async ({ input: { id, ...rest } }) => {
@@ -91,13 +85,11 @@ export const invoices = t.router({
           where: { id }
         });
       } else {
-        // await prisma.book.create({
-        //   data: {
-        //     ...rest,
-        //     stores: { connect: storeIds.map((id) => ({ id })) },
-        //     updatedByUserId: userId
-        //   }
-        // });
+        await prisma.invoice.create({
+          data: {
+            ...rest
+          }
+        });
       }
     }),
 

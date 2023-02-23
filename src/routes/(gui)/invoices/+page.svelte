@@ -7,6 +7,7 @@
 	// import TextareaInput from '$lib/components/inputs/TextareaInput.svelte';
 	import TextInput from '$lib/components/inputs/TextInput.svelte';
 	import ModalEditor from '$lib/components/ModalEditor.svelte';
+	import DateInput from '$lib/components/inputs/DateInput.svelte';
 	import { savable } from '$lib/savable';
 	import { trpc } from '$lib/trpc/client';
 	import type { RouterInputs, RouterOutputs } from '$lib/trpc/router';
@@ -24,6 +25,8 @@
 	let errors: { message: string; path: string[] }[] | null = null;
 	let needsAuthorization = false;
 
+	$: console.log(item);
+
 	const handleAdd = async () => {
 		if (!data.isAuthenticated) {
 			needsAuthorization = true;
@@ -32,6 +35,7 @@
 
 		companies = await trpc().companies.loadOptions.query();
 
+		// Resetting input object, i assume
 		item = {
 			id: '',
 			number: 0,
@@ -134,18 +138,16 @@
 	on:cancel={handleCancel}
 	on:save={handleSave}
 >
-	<TextInput name="title" label="Title" required {errors} {item} />
-	<div class="grid">
-		<Select
-			name="companyId"
-			label="company"
-			required
-			{errors}
-			{item}
-			options={companies}
-		/>
-		<TextInput name="price" label="Price" price required {errors} {item} />
-	</div>
+	<DateInput name="date" label="Date" required {errors} {item} />
+	<DateInput name="dueDate" label="Due Date" required {errors} {item} />
+	<Select
+		name="companyId"
+		label="company"
+		required
+		{errors}
+		{item}
+		options={companies}
+	/>
 	<!-- <CheckboxList -->
 	<!-- 	name="storeIds" -->
 	<!-- 	label="Store availability" -->
