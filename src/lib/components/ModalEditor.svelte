@@ -43,6 +43,7 @@
 		}
 		dispatch('save', data as T);
 	};
+	$: console.log(item);
 </script>
 
 <form on:submit|preventDefault={handleSave}>

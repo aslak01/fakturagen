@@ -12,6 +12,7 @@
 	import type { RouterInputs, RouterOutputs } from '$lib/trpc/router';
 	import { TRPCClientError } from '@trpc/client';
 	import type { PageData } from './$types';
+	import dayjs from '$lib/dayjs';
 
 	import { aMonthInTheFuture } from '$lib/utils';
 
@@ -32,10 +33,11 @@
 		companies = await trpc().companies.loadOptions.query();
 
 		item = {
-			id: null,
+			// id: null,
 			number: null,
 			date: new Date(),
 			dueDate: new Date(aMonthInTheFuture()),
+			companyId: '',
 			paid: false,
 			sum: 0
 		};
@@ -62,7 +64,8 @@
 		}
 
 		busy = true;
-		await trpc().invoices.delete.mutate(e.detail);
+		// await trpc().invoices.delete.mutate(e.detail);
+		console.log('would delete', e.detail);
 		await invalidateAll();
 		busy = false;
 	};
@@ -107,7 +110,12 @@
 	items={data.invoices}
 	columns={[
 		{ title: 'Title', grow: true, accessor: 'number' },
-		{ title: 'Price', grow: true, align: 'right', accessor: 'dueDate' },
+		{
+			title: 'Due',
+			grow: true,
+			align: 'right',
+			accessor: ({ dueDate }) => dayjs(new Date(dueDate)).format('DD/MM/YYYY')
+		},
 		{
 			title: 'Author',
 			nowrap: true,
@@ -121,7 +129,7 @@
 
 <ModalEditor
 	{item}
-	itemName="book"
+	itemName="invoice"
 	on:cancel={handleCancel}
 	on:save={handleSave}
 >

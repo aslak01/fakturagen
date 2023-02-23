@@ -12,6 +12,7 @@ export const invoices = t.router({
       prisma.invoice
         .findMany({
           select: {
+            id: true,
             number: true,
             company: { select: { name: true } },
             date: true,
@@ -59,7 +60,8 @@ export const invoices = t.router({
     .use(logger)
     .input(
       z.object({
-        number: z.number().nullable(),
+        id: z.string(),
+        number: z.number(),
         companyId: z.string().min(1, 'Should be selected'),
         date: z.date(),
         dueDate: z.date(),
@@ -74,16 +76,17 @@ export const invoices = t.router({
         // storeIds: z.array(z.string())
       })
     )
-    .mutation(async ({ input: { number, ...rest } }) => {
-      if (number) {
-        // await prisma.invoice.update({
-        //   data: {
-        //     ...rest,
-        //     stores: { connect: storeIds.map((id) => ({ id })) },
-        //     updatedByUserId: userId
-        //   },
-        //   where: { id }
-        // });
+    .mutation(async ({ input: { id, ...rest } }) => {
+      if (id) {
+        await prisma.invoice.update({
+          data: {
+            ...rest,
+            // company: { connect: id => companyId }
+            // stores: { connect: storeIds.map((id) => ({ id })) },
+            // updatedByUserId: userId
+          },
+          where: { id }
+        });
       } else {
         // await prisma.book.create({
         //   data: {
