@@ -17,6 +17,7 @@
 	export let busy = false;
 	export let title: string;
 	export let items: T[];
+	export let numbered = false;
 	export let columns: {
 		title: string;
 		grow?: true;
@@ -65,7 +66,9 @@
 		<table>
 			<thead>
 				<tr>
-					<th scope="col">#</th>
+					{#if numbered}
+						<th scope="col">#</th>
+					{/if}
 					{#each columns as { title, grow, nowrap, align } (title)}
 						<th
 							scope="col"
@@ -89,7 +92,9 @@
 				{#if items.length}
 					{#each items as item, index (item.id)}
 						<tr>
-							<td>{index + 1}</td>
+							{#if numbered}
+								<td>{index + 1}</td>
+							{/if}
 							{#each columns as { title, nowrap, align, accessor } (title)}
 								<td
 									class:nowrap

@@ -88,7 +88,7 @@
 		{
 			title: 'Invoices',
 			align: 'right',
-			render: (company) => company._count.invoices
+			accessor: (company) => (company.invoices ? company.invoices.length : '0')
 		}
 	]}
 	on:add={handleAdd}

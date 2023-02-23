@@ -16,6 +16,7 @@ export const companies = t.router({
         address: true,
         createdAt: true,
         updatedAt: true,
+        invoices: true,
         _count: { select: { invoices: true } }
       },
       orderBy: { updatedAt: 'desc' },

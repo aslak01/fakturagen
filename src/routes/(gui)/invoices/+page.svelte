@@ -114,10 +114,16 @@
 	title="invoices"
 	items={data.invoices}
 	columns={[
-		{ title: 'Title', grow: true, accessor: 'number' },
+		{ title: 'Number', grow: true, accessor: 'number' },
+		{
+			title: 'Date',
+			grow: false,
+			align: 'right',
+			accessor: ({ date }) => dayjs(new Date(date)).format('DD/MM/YYYY')
+		},
 		{
 			title: 'Due',
-			grow: true,
+			grow: false,
 			align: 'right',
 			accessor: ({ dueDate }) => dayjs(new Date(dueDate)).format('DD/MM/YYYY')
 		},
