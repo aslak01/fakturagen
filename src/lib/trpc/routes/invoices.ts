@@ -36,19 +36,22 @@ export const invoices = t.router({
 
   load: t.procedure
     .use(logger)
-    .input(z.number())
+    .input(z.string())
     .query(({ input }) =>
       prisma.invoice
         .findUniqueOrThrow({
           select: {
+            id: true,
             number: true,
             companyId: true,
             date: true,
             dueDate: true,
             createdAt: true,
-            updatedAt: true
+            updatedAt: true,
+            paid: true,
+            sum: true
           },
-          where: { number: input }
+          where: { id: input }
         })
         .then(({ companyId, ...rest }) => ({
           ...rest,
@@ -63,8 +66,8 @@ export const invoices = t.router({
         id: z.string(),
         number: z.number(),
         companyId: z.string().min(1, 'Should be selected'),
-        date: z.date(),
-        dueDate: z.date(),
+        date: z.date().or(z.string()),
+        dueDate: z.date().or(z.string()),
         paid: z.boolean(),
         sum: z.number().nullable()
 

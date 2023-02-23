@@ -33,8 +33,8 @@
 		companies = await trpc().companies.loadOptions.query();
 
 		item = {
-			// id: null,
-			number: null,
+			id: '',
+			number: 0,
 			date: new Date(),
 			dueDate: new Date(aMonthInTheFuture()),
 			companyId: '',
@@ -51,9 +51,10 @@
 
 		busy = true;
 		[item, companies] = await Promise.all([
-			trpc().invoices.load.query(Number(e.detail)),
+			trpc().invoices.load.query(e.detail),
 			trpc().companies.loadOptions.query()
 		]);
+		console.log(item, companies);
 		busy = false;
 	};
 
