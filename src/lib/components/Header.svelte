@@ -10,40 +10,33 @@
 
 <header>
 	<h1>Invoice generator</h1>
-	<hr />
 	<nav>
-		<ul>
-			<HeaderNavLink to="/" title="Home" />
-			<HeaderNavLink to="/companies" title="Companies" />
-			<HeaderNavLink to="/invoices" title="Invoices" />
-			{#if isAuthenticated}
-				<HeaderNavLink on:click={logout} title="Logout" />
-			{:else}
-				<HeaderNavLink to="/login" title="Login" />
-			{/if}
-		</ul>
+		<HeaderNavLink to="/" title="Home" />
+		<HeaderNavLink to="/companies" title="Companies" />
+		<HeaderNavLink to="/invoices" title="Invoices" />
+		{#if isAuthenticated}
+			<HeaderNavLink on:click={logout} title="Logout" />
+		{:else}
+			<HeaderNavLink to="/login" title="Login" />
+		{/if}
 	</nav>
 </header>
 
 <style>
 	header {
-		background: var(--card-background-color);
-		padding: 1em 1em 0.25em;
-		text-align: center;
 		text-transform: uppercase;
+		justify-content: center;
+		display: flex;
+		flex-direction: column;
+		color: var(--text-hl);
 	}
 
 	h1 {
 		font-size: 1.2em;
 		margin-block: unset;
 	}
-
-	hr {
-		width: 5em;
-		margin: 1em auto -0.4em;
-	}
-
 	nav {
-		justify-content: center;
+		display: flex;
+		flex-direction: row;
 	}
 </style>

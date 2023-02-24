@@ -27,7 +27,7 @@
 
 	const handleAdd = async () => {
 		ioCheckAuth();
-		item = { id: null, name: '', currency: '' };
+		item = { id: null, name: '', currency: '', orgNo: '' };
 	};
 
 	const handleEdit = async (e: CustomEvent<string>) => {

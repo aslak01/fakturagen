@@ -12,45 +12,36 @@
 	};
 </script>
 
-<li>
-	<a
-		class:active={$page.url.pathname === to}
-		href={to || '#'}
-		on:click={handleClick}>{title}</a
-	>
-</li>
+<a
+	class:active={$page.url.pathname === to}
+	href={to || '#'}
+	on:click={handleClick}>{title}</a
+>
 
 <style>
-	li:not(:first-child) {
-		position: relative;
-	}
-
-	li:not(:first-child)::before {
-		content: '·';
+	a,
+	a:visited {
+		color: var(--text-hl);
 		display: inline-block;
-		width: 2em;
-		position: absolute;
-		left: -1em;
-		pointer-events: none;
+		padding-inline: 0.5ch;
 	}
 
-	a {
-		position: relative;
+	/* a:first-child { */
+	/* 	padding-left: 0; */
+	/* } */
+	/* a:last-child { */
+	/* 	padding-right: 0; */
+	/* } */
+
+	a:not(:first-child) {
+		margin-left: 1rem;
+	}
+	a:hover {
+		background: var(--text-hl);
+		color: var(--surface);
 	}
 
-	a::after {
-		content: '';
-		position: absolute;
-		bottom: calc(var(--spacing) * 0.75);
-		left: calc(var(--spacing) * 0.5);
-		right: calc(var(--spacing) * 0.5);
-		height: 2px;
-		background: var(--color);
-		transform: scaleX(0);
-		transition: transform 0.2s;
-	}
-
-	.active::after {
-		transform: scaleX(1);
+	a:active {
+		background: darkred;
 	}
 </style>

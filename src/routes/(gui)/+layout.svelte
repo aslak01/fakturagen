@@ -7,20 +7,20 @@
 
 <svelte:head>
 	<title>Fakturagenerator</title>
-	<link
-		rel="stylesheet"
-		href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
-	/>
+	<!-- <link -->
+	<!-- 	rel="stylesheet" -->
+	<!-- 	href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css" -->
+	<!-- /> -->
 </svelte:head>
 
-<Header isAuthenticated={data.isAuthenticated} />
 <main class="container">
+	<Header isAuthenticated={data.isAuthenticated} />
 	<slot />
 </main>
 
 <style>
 	main {
 		flex: 1 0 auto;
-		padding: 2em 1em;
+		padding: 1em;
 	}
 </style>

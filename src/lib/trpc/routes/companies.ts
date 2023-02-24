@@ -68,10 +68,8 @@ export const companies = t.router({
       z.object({
         id: z.string().nullable(),
         name: z.string().min(3).max(50).transform(trim),
-        orgNo: z.string().min(5).max(10).transform(trim),
-        currency: z.string().min(1).max(100).transform(trim),
-        createdAt: z.date(),
-        updatedAt: z.date()
+        orgNo: z.string().min(5).max(10).transform(trim).nullable(),
+        currency: z.string().min(1).max(100).transform(trim).nullable(),
       })
     )
     .mutation(async ({ input: { id, ...rest } }) => {

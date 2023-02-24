@@ -84,13 +84,12 @@
 <style>
 	small {
 		display: block;
-		margin-left: 1.5em;
-		text-indent: -1.5em;
-		color: var(--muted-color);
+		/* text-indent: -1.5em; */
+		/* margin-left: 1.5em; */
 	}
 
 	.clock-icon {
-		vertical-align: text-bottom;
-		margin-right: 0.25em;
+		display: inline-flex;
+		height: 100;
 	}
 </style>
