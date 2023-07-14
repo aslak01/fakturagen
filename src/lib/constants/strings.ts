@@ -44,7 +44,7 @@ export const vat = {
 export const yourCompany = {
 	name: import.meta.env.VITE_YOUR_FIRM_NAME || 'Mitt firma',
 	orgno: splitStringInNs(import.meta.env.VITE_YOUR_FIRM_ORGNO || '312321123'),
-	str: import.meta.env.VITE_YOUR_FIRM_STR || 'Adressegassa 12',
+	str: import.meta.env.VITE_YOUR_FIRM_STR || 'Adressegassa 123',
 	poCty: import.meta.env.VITE_YOUR_FIRM_PO_CTY || '1234 Sted'
 };
 
@@ -58,7 +58,7 @@ export const yourBank = {
 	accno: splitStrInBacc(import.meta.env.VITE_YOUR_BANK_ACC || '12341212345'),
 	iban: splitStrInIBAN(import.meta.env.VITE_YOUR_IBAN || 'NO1212341212345'),
 	bic: import.meta.env.VITE_YOUR_BIC || 'BANKN12XXX',
-	bank: import.meta.env.VITE_YOUR_BANK || 'My Bank'
+	bank: import.meta.env.VITE_YOUR_BANK || 'Min bankeste bank'
 };
 
 export const customer = {
@@ -88,7 +88,7 @@ const jsonData = parseJson(json);
 export const lines = jsonData || [
 	{
 		date: parseDate(randomDate()),
-		description: 'DE > NO DAI-2022/14354/#1/1',
+		description: 'En tjeneste som er utført',
 		price: '111'
 	},
 	{
@@ -103,12 +103,12 @@ export const lines = jsonData || [
 	},
 	{
 		date: parseDate(randomDate()),
-		description: 'En tredje ting',
+		description: 'Enda en ting',
 		price: '69'
 	},
 	{
 		date: parseDate(randomDate()),
-		description: 'En fjerde ting',
+		description: 'En annen ting',
 		price: '42'
 	}
 ];

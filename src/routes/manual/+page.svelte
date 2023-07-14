@@ -32,19 +32,27 @@
 	});
 </script>
 
-<button on:click={() => saveFile(pdfString, invoiceMeta, yourCompany)}
-	>Save</button
->
-<div class="preview" class:invisible={pdfNotGenerated}>
-	<iframe title="pdf" bind:this={pdf} style="width: 100%; height: 100%;" />
+<div class="wrapper">
+	<button on:click={() => saveFile(pdfString, invoiceMeta, yourCompany)}
+		>Lagre PDF</button
+	>
+	<div class="preview" class:invisible={pdfNotGenerated}>
+		<iframe title="pdf" bind:this={pdf} style="width: 100%; height: 100%;" />
+	</div>
 </div>
 
 <style>
+	.wrapper {
+		text-align: center;
+	}
+	button {
+		margin-bottom: 1rem;
+	}
 	.invisible {
 		display: none;
 	}
 	.preview {
-		height: 90vh;
+		height: 94vh;
 		overflow: hidden;
 	}
 </style>
