@@ -220,7 +220,7 @@ export const lineDrawer = (
 		});
 		const price = formatNumberToCurrency(
 			Number(line.price),
-			currency.short || currency.name,
+			currency.short,
 			locale
 		);
 		const lengthOfPrice = font.widthOfTextAtSize(price, size);
