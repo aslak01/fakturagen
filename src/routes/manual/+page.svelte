@@ -44,7 +44,7 @@
 		display: none;
 	}
 	.preview {
-		height: 100%;
+		height: 90vh;
 		overflow: hidden;
 	}
 </style>

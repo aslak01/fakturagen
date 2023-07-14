@@ -1,13 +1,13 @@
 import {
-	parseDate,
-	splitStringInNs,
-	randomDate,
 	aMonthInTheFuture,
+	parseDate,
+	randomDate,
 	splitStrInBacc,
+	splitStringInNs,
 	splitStrInIBAN
 } from '$lib/utils';
 
-import { sumNrArr, formatNumberToCurrency } from '$lib/utils';
+import { formatNumberToCurrency, sumNrArr } from '$lib/utils';
 
 import type { Currencies } from '$lib/interfaces/invoiceStrings';
 
@@ -116,5 +116,5 @@ export const lines = jsonData || [
 const prices = lines.map((i) => Number(i.price));
 
 export const sum = vat.enabled
-	? formatNumberToCurrency(sumNrArr(prices) * (vat.rate / 100 + 1))
-	: formatNumberToCurrency(sumNrArr(prices));
+	? formatNumberToCurrency(sumNrArr(prices) * (vat.rate / 100 + 1), curr)
+	: formatNumberToCurrency(sumNrArr(prices), curr);

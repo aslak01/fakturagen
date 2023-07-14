@@ -1,15 +1,15 @@
 import type {
 	Constraints,
-	Quadrants,
 	Margins,
+	Quadrants,
 	TitlesAndDimensions,
 	Vat
 } from '$lib/interfaces/pdf';
-import type { Line, Currency } from '$lib/interfaces/invoiceStrings';
-import type { PDFPage, PDFFont } from 'pdf-lib';
+import type { Currency, Line } from '$lib/interfaces/invoiceStrings';
+import type { PDFFont, PDFPage } from 'pdf-lib';
 import { drawInline } from './generalisedDrawRoutines';
 import { defaults } from '$lib/constants/pdfSettings';
-import { sumNrArr, formatNumberToCurrency } from '$lib/utils';
+import { formatNumberToCurrency, sumNrArr } from '$lib/utils';
 
 export const longestLine = (
 	lines: string[],
@@ -220,7 +220,7 @@ export const lineDrawer = (
 		});
 		const price = formatNumberToCurrency(
 			Number(line.price),
-			currency.short,
+			currency.short || currency.name,
 			locale
 		);
 		const lengthOfPrice = font.widthOfTextAtSize(price, size);
