@@ -7,7 +7,7 @@ module.exports = {
 		sourceType: "module",
 		ecmaVersion: 2020,
 		project: "./tsconfig.json",
-		extraFileExtensions: [".svelte"], // This is a required setting in `@typescript-eslint/parser` v4.24.0.
+		extraFileExtensions: [".svelte"],
 	},
 	overrides: [
 		{
@@ -22,11 +22,6 @@ module.exports = {
 	settings: {
 		svelte: {
 			ignoreWarnings: ["svelte/no-at-html-tags"],
-			compileOptions: {
-				postcss: {
-					configFilePath: "./postcss.config.js",
-				},
-			},
 		},
 	},
 	env: {
