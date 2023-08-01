@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from "svelte";
 
 	export let loading: boolean;
 	export let columnsLength: number;
@@ -13,7 +13,7 @@
 		{#if loading}Loading...{:else}No {itemsPluralName} found.<br />Why don't you
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<!-- svelte-ignore a11y-missing-attribute -->
-			<a on:click={() => dispatch('add')}>add one</a>?{/if}
+			<a on:click={() => dispatch("add")}>add one</a>?{/if}
 	</td>
 </tr>
 

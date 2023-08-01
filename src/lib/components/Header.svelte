@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
-	import HeaderNavLink from './HeaderNavLink.svelte';
+	import { invalidateAll } from "$app/navigation";
+	import HeaderNavLink from "./HeaderNavLink.svelte";
 	export let isAuthenticated: boolean;
 	const logout = async () => {
-		await fetch('/logout', { method: 'POST' });
+		await fetch("/logout", { method: "POST" });
 		invalidateAll();
 	};
 </script>
@@ -24,16 +24,16 @@
 
 <style>
 	header {
-		text-transform: uppercase;
-		justify-content: center;
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
 		color: var(--text-hl);
+		text-transform: uppercase;
 	}
 
 	h1 {
-		font-size: 1.2em;
 		margin-block: unset;
+		font-size: 1.2em;
 	}
 	nav {
 		display: flex;

@@ -1,27 +1,27 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
-	import AuthorizationAlert from '$lib/components/AuthorizationAlert.svelte';
-	import DataTable from '$lib/components/DataTable.svelte';
+	import { invalidateAll } from "$app/navigation";
+	import AuthorizationAlert from "$lib/components/AuthorizationAlert.svelte";
+	import DataTable from "$lib/components/DataTable.svelte";
 	// import CheckboxList from '$lib/components/inputs/CheckboxList.svelte';
-	import Select from '$lib/components/inputs/Select.svelte';
+	import Select from "$lib/components/inputs/Select.svelte";
 	// import TextareaInput from '$lib/components/inputs/TextareaInput.svelte';
-	import TextInput from '$lib/components/inputs/TextInput.svelte';
-	import ModalEditor from '$lib/components/ModalEditor.svelte';
-	import DateInput from '$lib/components/inputs/DateInput.svelte';
-	import { savable } from '$lib/savable';
-	import { trpc } from '$lib/trpc/client';
-	import type { RouterInputs, RouterOutputs } from '$lib/trpc/router';
-	import { TRPCClientError } from '@trpc/client';
-	import type { PageData } from './$types';
-	import dayjs from '$lib/dayjs';
+	import TextInput from "$lib/components/inputs/TextInput.svelte";
+	import ModalEditor from "$lib/components/ModalEditor.svelte";
+	import DateInput from "$lib/components/inputs/DateInput.svelte";
+	import { savable } from "$lib/savable";
+	import { trpc } from "$lib/trpc/client";
+	import type { RouterInputs, RouterOutputs } from "$lib/trpc/router";
+	import { TRPCClientError } from "@trpc/client";
+	import type { PageData } from "./$types";
+	import dayjs from "$lib/dayjs";
 
-	import { aMonthInTheFuture } from '$lib/utils';
+	import { aMonthInTheFuture } from "$lib/utils";
 
 	export let data: PageData;
 
 	let busy = false;
-	let item: RouterInputs['invoices']['save'] | null = null;
-	let companies: RouterOutputs['companies']['loadOptions'] = [];
+	let item: RouterInputs["invoices"]["save"] | null = null;
+	let companies: RouterOutputs["companies"]["loadOptions"] = [];
 	let errors: { message: string; path: string[] }[] | null = null;
 	let needsAuthorization = false;
 
@@ -37,13 +37,13 @@
 
 		// Resetting input object, i assume
 		item = {
-			id: '',
+			id: "",
 			number: 0,
 			date: new Date(),
 			dueDate: new Date(aMonthInTheFuture()),
-			companyId: '',
+			companyId: "",
 			paid: false,
-			sum: 0
+			sum: 0,
 		};
 	};
 
@@ -56,7 +56,7 @@
 		busy = true;
 		[item, companies] = await Promise.all([
 			trpc().invoices.load.query(e.detail),
-			trpc().companies.loadOptions.query()
+			trpc().companies.loadOptions.query(),
 		]);
 		console.log(item, companies);
 		busy = false;
@@ -70,7 +70,7 @@
 
 		busy = true;
 		// await trpc().invoices.delete.mutate(e.detail);
-		console.log('would delete', e.detail);
+		console.log("would delete", e.detail);
 		await invalidateAll();
 		busy = false;
 	};
@@ -81,7 +81,7 @@
 	};
 
 	const handleSave = async (e: {
-		detail: RouterInputs['invoices']['save'];
+		detail: RouterInputs["invoices"]["save"];
 	}) => {
 		if (!data.isAuthenticated) {
 			needsAuthorization = true;
@@ -114,24 +114,24 @@
 	title="invoices"
 	items={data.invoices}
 	columns={[
-		{ title: 'Number', grow: true, accessor: 'number' },
+		{ title: "Number", grow: true, accessor: "number" },
 		{
-			title: 'Date',
+			title: "Date",
 			grow: false,
-			align: 'right',
-			accessor: ({ date }) => dayjs(new Date(date)).format('DD/MM/YYYY')
+			align: "right",
+			accessor: ({ date }) => dayjs(new Date(date)).format("DD/MM/YYYY"),
 		},
 		{
-			title: 'Due',
+			title: "Due",
 			grow: false,
-			align: 'right',
-			accessor: ({ dueDate }) => dayjs(new Date(dueDate)).format('DD/MM/YYYY')
+			align: "right",
+			accessor: ({ dueDate }) => dayjs(new Date(dueDate)).format("DD/MM/YYYY"),
 		},
 		{
-			title: 'Author',
+			title: "Author",
 			nowrap: true,
-			accessor: ({ company: { name } }) => name
-		}
+			accessor: ({ company: { name } }) => name,
+		},
 	]}
 	on:add={handleAdd}
 	on:edit={handleEdit}

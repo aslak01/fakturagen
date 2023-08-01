@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { goto, invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
-	import type { ActionData } from './$types';
+	import { enhance } from "$app/forms";
+	import { goto, invalidateAll } from "$app/navigation";
+	import { page } from "$app/stores";
+	import type { ActionData } from "./$types";
 
 	export let form: ActionData;
 
@@ -10,20 +10,20 @@
 	let emailInput: HTMLInputElement;
 	let passwordInput: HTMLInputElement;
 
-	$: returnTo = $page.url.searchParams.get('returnTo');
+	$: returnTo = $page.url.searchParams.get("returnTo");
 
 	$: (async () => {
 		if (form?.success) {
 			await invalidateAll();
-			await goto(returnTo || '/');
+			await goto(returnTo || "/");
 		} else if (form?.error) {
 			error = true;
 		}
 	})();
 
-	const autofill = (user: 'demo') => () => {
+	const autofill = (user: "demo") => () => {
 		emailInput.value = `${user}@notreal.email`;
-		passwordInput.value = 'demo';
+		passwordInput.value = "demo";
 	};
 
 	const clearError = () => {
@@ -41,7 +41,7 @@
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label>Autofill</label>
 		<div class="grid">
-			<button class="secondary" on:click|preventDefault={autofill('demo')}
+			<button class="secondary" on:click|preventDefault={autofill("demo")}
 				>demo</button
 			>
 		</div>
@@ -79,7 +79,7 @@
 
 <style>
 	form {
-		max-width: 500px;
 		margin: var(--block-spacing-vertical) auto;
+		max-width: 500px;
 	}
 </style>

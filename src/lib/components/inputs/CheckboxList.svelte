@@ -25,11 +25,11 @@
 
 <style>
 	div {
-		margin-top: 0.5em;
-		margin-bottom: 0.5em;
 		display: flex;
-		flex-wrap: wrap;
 		column-gap: 1em;
 		row-gap: 0.25em;
+		flex-wrap: wrap;
+		margin-top: 0.5em;
+		margin-bottom: 0.5em;
 	}
 </style>

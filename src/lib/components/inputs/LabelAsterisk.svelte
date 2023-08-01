@@ -8,7 +8,7 @@
 
 <style>
 	span {
-		margin-left: 0.25em;
 		opacity: 0.5;
+		margin-left: 0.25em;
 	}
 </style>

@@ -3,18 +3,18 @@ import type {
 	Margins,
 	Quadrants,
 	TitlesAndDimensions,
-	Vat
-} from '$lib/interfaces/pdf';
-import type { Currency, Line } from '$lib/interfaces/invoiceStrings';
-import type { PDFFont, PDFPage } from 'pdf-lib';
-import { drawInline } from './generalisedDrawRoutines';
-import { defaults } from '$lib/constants/pdfSettings';
-import { formatNumberToCurrency, sumNrArr } from '$lib/utils';
+	Vat,
+} from "$lib/interfaces/pdf";
+import type { Currency, Line } from "$lib/interfaces/invoiceStrings";
+import type { PDFFont, PDFPage } from "pdf-lib";
+import { drawInline } from "./generalisedDrawRoutines";
+import { defaults } from "$lib/constants/pdfSettings";
+import { formatNumberToCurrency, sumNrArr } from "$lib/utils";
 
 export const longestLine = (
 	lines: string[],
 	font: PDFFont,
-	size: number = defaults.size.small
+	size: number = defaults.size.small,
 ): number => {
 	let length = 0;
 	for (const line of lines) {
@@ -35,7 +35,7 @@ export const relQuadToAbsQuad = (width: number, quadrants: number[]) => {
 
 export const evaluateQuadArrays = (
 	evaluatedArr: number[],
-	comparisonArr: number[]
+	comparisonArr: number[],
 ): boolean => {
 	let withinParams = true;
 	evaluatedArr.forEach((n, i) => {
@@ -46,14 +46,14 @@ export const evaluateQuadArrays = (
 
 export const adaptArrays = (
 	evaluatedArr: number[],
-	comparisonArr: number[]
+	comparisonArr: number[],
 ): number[] => {
 	if (evaluateQuadArrays(evaluatedArr, comparisonArr)) return evaluatedArr;
 
 	const sumEvalArr = sumNrArr(evaluatedArr);
 	const sumCompArr = sumNrArr(comparisonArr);
 
-	if (sumEvalArr > sumCompArr) throw new Error('Lines too long to fit');
+	if (sumEvalArr > sumCompArr) throw new Error("Lines too long to fit");
 
 	const adapted = evaluatedArr;
 	while (evaluateQuadArrays(adapted, comparisonArr) === false) {
@@ -63,7 +63,7 @@ export const adaptArrays = (
 				const prevTarget = comparisonArr[i - 1];
 				const nextTarget = comparisonArr[i + 1];
 				if (
-					typeof adapted[i - 1] !== 'undefined' &&
+					typeof adapted[i - 1] !== "undefined" &&
 					typeof adapted[i + 1] !== undefined
 				) {
 					if (adapted[i - 1] < prevTarget) {
@@ -74,12 +74,12 @@ export const adaptArrays = (
 						adapted[i + 1] + 1;
 						adapted[i] -= 1;
 					}
-				} else if (typeof adapted[i - 1] !== 'undefined') {
+				} else if (typeof adapted[i - 1] !== "undefined") {
 					if (adapted[i - 1] < prevTarget) {
 						adapted[i - 1] += 1;
 						adapted[i] -= 1;
 					}
-				} else if (typeof adapted[i + 1] !== 'undefined') {
+				} else if (typeof adapted[i + 1] !== "undefined") {
 					if (adapted[i + 1] < nextTarget) {
 						adapted[i + 1] += 1;
 						adapted[i] -= 1;
@@ -95,7 +95,7 @@ export const calculateQuadrants = (
 	longestLines: number[],
 	width: number,
 	quadrants: number[] = [20, 60, 20],
-	margin: number = defaults.xMargin
+	margin: number = defaults.xMargin,
 ): number[] => {
 	const usableWidth = width - margin * 2;
 	const absQuads = relQuadToAbsQuad(usableWidth, quadrants);
@@ -109,7 +109,7 @@ export const lineLengthFigurerOuter = (
 	headingObject: Line,
 	lineArray: Line[],
 	font: PDFFont,
-	size: number
+	size: number,
 ) => {
 	const categories: string[] = [];
 	const categoryMaxLengths: number[] = [];
@@ -127,7 +127,7 @@ export const lineLengthFigurerOuter = (
 	});
 	return {
 		titles: categories,
-		lineLengths: categoryMaxLengths
+		lineLengths: categoryMaxLengths,
 	};
 };
 
@@ -136,7 +136,7 @@ export const getXminsAndMaxs = (
 	translatedQuadrants: Quadrants,
 	usableWidth: number,
 	gap: number = defaults.gap.small,
-	margins: Margins = defaults.margins
+	margins: Margins = defaults.margins,
 ) => {
 	const xMins: number[] = [];
 	const xMaxs: number[] = [];
@@ -168,7 +168,7 @@ export const lineDrawer = (
 	page: PDFPage,
 	size: number = defaults.size.small,
 	margins: Margins = defaults.margins,
-	gap: number = defaults.gap.small
+	gap: number = defaults.gap.small,
 ) => {
 	let headings;
 	if (vat.enabled === false) {
@@ -181,7 +181,7 @@ export const lineDrawer = (
 		headings,
 		lineArray,
 		font,
-		size
+		size,
 	);
 	// todo: implement the auto sizing algorithm
 
@@ -193,7 +193,7 @@ export const lineDrawer = (
 		titlesAndDimensions,
 		translatedQuadrants,
 		usableWidth,
-		gap
+		gap,
 	);
 
 	let titlesY = { ymax: 0 };
@@ -203,7 +203,7 @@ export const lineDrawer = (
 			title,
 			{ x: xMins[i], y: constraints.y },
 			boldFont,
-			page
+			page,
 		);
 	});
 
@@ -212,43 +212,43 @@ export const lineDrawer = (
 	lineArray.forEach((line) => {
 		page.drawText(line.date, {
 			x: xMins[0],
-			y: linePos
+			y: linePos,
 		});
 		page.drawText(line.description, {
 			x: xMins[1],
-			y: linePos
+			y: linePos,
 		});
 		const price = formatNumberToCurrency(
 			Number(line.price),
 			currency.short,
-			locale
+			locale,
 		);
 		const lengthOfPrice = font.widthOfTextAtSize(price, size);
 		page.drawText(price, {
 			x: xMaxs[2] - lengthOfPrice,
-			y: linePos
+			y: linePos,
 		});
 
 		if (vat.enabled) {
 			const vatString = formatNumberToCurrency(
 				(vat.rate / 100) * Number(line.price),
 				currency.short,
-				locale
+				locale,
 			);
 			const width = font.widthOfTextAtSize(vatString, size);
 			page.drawText(vatString, {
 				x: xMaxs[3] - width,
-				y: linePos
+				y: linePos,
 			});
 			const priceWithVat = formatNumberToCurrency(
 				Number(line.price) * (vat.rate / 100 + 1),
 				currency.short,
-				locale
+				locale,
 			);
 			const lengthOfVat = font.widthOfTextAtSize(priceWithVat, size);
 			page.drawText(priceWithVat, {
 				x: xMaxs[4] - lengthOfVat,
-				y: linePos
+				y: linePos,
 			});
 		}
 		linePos -= lineHeight;
@@ -262,7 +262,7 @@ export const lineDrawer = (
 		linePos,
 		xMaxs,
 		page,
-		boldFont
+		boldFont,
 	);
 	return linePos;
 };
@@ -276,7 +276,7 @@ export const sumsDrawer = (
 	xMaxs: number[],
 	page: PDFPage,
 	font: PDFFont,
-	size: number = defaults.size.small
+	size: number = defaults.size.small,
 ) => {
 	const priceNumbersArray = pricesArray.map((i) => Number(i));
 	const rawSum = sumNrArr(priceNumbersArray);
@@ -285,7 +285,7 @@ export const sumsDrawer = (
 	page.drawText(sumString, {
 		x: xMaxs[2] - lengthOfSumString,
 		y: linesEnd,
-		font
+		font,
 	});
 	if (vat.enabled) {
 		const vatSum = rawSum * (vat.rate / 100);
@@ -294,23 +294,23 @@ export const sumsDrawer = (
 		page.drawText(vatSumString, {
 			x: xMaxs[3] - lengthOfVatSumString,
 			y: linesEnd,
-			font
+			font,
 		});
 
 		const summarium = rawSum + vatSum;
 		const summariumString = formatNumberToCurrency(
 			summarium,
 			currency.short,
-			locale
+			locale,
 		);
 		const lengthOfSummariumString = font.widthOfTextAtSize(
 			summariumString,
-			size
+			size,
 		);
 		page.drawText(summariumString, {
 			x: xMaxs[4] - lengthOfSummariumString,
 			y: linesEnd,
-			font
+			font,
 		});
 	}
 };

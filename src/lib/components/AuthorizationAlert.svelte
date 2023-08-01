@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { createEventDispatcher } from 'svelte';
+	import { page } from "$app/stores";
+	import { createEventDispatcher } from "svelte";
 	export let visible = false;
 	const dispatch = createEventDispatcher<{ close: never }>();
 	const handleClose = () => {
-		dispatch('close');
+		dispatch("close");
 	};
 </script>
 

@@ -1,46 +1,47 @@
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-text-size-adjust: 100%;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+	--container-padding: 2rem;
+	--text: hsl(54, 9%, 85%);
+	--text-hl: hsl(54, 9%, 95%);
+	--surface: hsl(55, 48%, 6%);
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 24px;
+	font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
 
-  --container-padding: 2rem;
-  --text: hsl(54, 9%, 85%);
-  --text-hl: hsl(54, 9%, 95%);
-  --surface: hsl(55, 48%, 6%)
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
 }
 
 body {
 	margin: 0;
+	background: var(--surface);
 	padding: 0;
-  color: var(--text);
-  background: var(--surface);
+	color: var(--text);
 }
 
 html,
 body,
 body > div {
-  min-height: 100%;
+	min-height: 100%;
 }
 
 body > div {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 svg.icon {
-  width: 24px;
-  height: 24px;
-  vertical-align: text-bottom;
+	vertical-align: text-bottom;
+	width: 24px;
+	height: 24px;
 }
 
-a, a:visited {
-  color: var(--text);
-  text-decoration: none;
+a,
+a:visited {
+	color: var(--text);
+	text-decoration: none;
 }
