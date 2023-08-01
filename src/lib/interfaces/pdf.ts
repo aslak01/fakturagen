@@ -1,4 +1,4 @@
-import type { PDFFont, PDFPage, RGB, CMYK } from 'pdf-lib';
+import type { PDFFont, PDFPage, RGB, CMYK } from "pdf-lib";
 
 export interface Settings {
 	titleSize: number;

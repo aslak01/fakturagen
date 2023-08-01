@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-	import IconPlus from './icons/IconPlus.svelte';
+	import { createEventDispatcher } from "svelte";
+	import IconPlus from "./icons/IconPlus.svelte";
 
 	export let title: string;
 	export let filterDescription: string;
@@ -14,7 +14,7 @@
 		class="filter"
 		type="search"
 		placeholder={`Filter by ${filterDescription}…`}
-		on:input={(e) => dispatch('filter', e.currentTarget.value)}
+		on:input={(e) => dispatch("filter", e.currentTarget.value)}
 	/>
 	<div class="button-container">
 		<button on:click><IconPlus />Add</button>
@@ -23,11 +23,11 @@
 
 <style>
 	.root {
-		padding: var(--spacing);
 		display: flex;
-		align-items: center;
 		justify-content: space-between;
+		align-items: center;
 		border-bottom: var(--border-width) dashed var(--table-border-color);
+		padding: var(--spacing);
 	}
 
 	h2 {

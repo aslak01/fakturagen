@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import dayjs from '$lib/dayjs';
-	import IconAdd from '$lib/icons/IconAdd.svelte';
-	import IconEmpty from '$lib/icons/IconEmpty.svelte';
-	import IconPencil from '$lib/icons/IconPencil.svelte';
-	import IconTrash from '$lib/icons/IconTrash.svelte';
-	import IconVerticalDots from '$lib/icons/IconVerticalDots.svelte';
-	import debounce from 'debounce';
-	import { createEventDispatcher, onDestroy } from 'svelte';
-	import { fade } from 'svelte/transition';
-	import BusyOverlay from './BusyOverlay.svelte';
+	import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
+	import dayjs from "$lib/dayjs";
+	import IconAdd from "$lib/icons/IconAdd.svelte";
+	import IconEmpty from "$lib/icons/IconEmpty.svelte";
+	import IconPencil from "$lib/icons/IconPencil.svelte";
+	import IconTrash from "$lib/icons/IconTrash.svelte";
+	import IconVerticalDots from "$lib/icons/IconVerticalDots.svelte";
+	import debounce from "debounce";
+	import { createEventDispatcher, onDestroy } from "svelte";
+	import { fade } from "svelte/transition";
+	import BusyOverlay from "./BusyOverlay.svelte";
 
 	type T = $$Generic<{ id: string; updatedAt: Date }>;
 
@@ -22,7 +22,7 @@
 		title: string;
 		grow?: true;
 		nowrap?: true;
-		align?: 'center' | 'right';
+		align?: "center" | "right";
 		accessor: ((record: T) => string | number) | keyof T;
 	}[];
 
@@ -33,7 +33,7 @@
 	}>();
 
 	const filter = debounce((q: string) => {
-		goto(`${location.pathname}${q ? `?q=${q}` : ''}`, { keepFocus: true });
+		goto(`${location.pathname}${q ? `?q=${q}` : ""}`, { keepFocus: true });
 	}, 500);
 
 	onDestroy(() => filter.clear());
@@ -47,7 +47,7 @@
 			<input
 				type="search"
 				placeholder="filter..."
-				value={$page.url.searchParams.get('q')}
+				value={$page.url.searchParams.get("q")}
 				on:input={(e) => filter(e.currentTarget.value)}
 			/>
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -58,7 +58,7 @@
 			/>
 		</div>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div class="icon-button" title="Add" on:click={() => dispatch('add')}>
+		<div class="icon-button" title="Add" on:click={() => dispatch("add")}>
 			<IconAdd />
 		</div>
 	</div>
@@ -72,10 +72,10 @@
 					{#each columns as { title, grow, nowrap, align } (title)}
 						<th
 							scope="col"
-							style:width={grow ? '100%' : undefined}
+							style:width={grow ? "100%" : undefined}
 							class:nowrap
-							class:align-center={align === 'center'}
-							class:align-right={align === 'right'}>{title}</th
+							class:align-center={align === "center"}
+							class:align-right={align === "right"}>{title}</th
 						>
 					{/each}
 					<th scope="col" class="align-right nowrap">Last updated</th>
@@ -98,10 +98,10 @@
 							{#each columns as { title, nowrap, align, accessor } (title)}
 								<td
 									class:nowrap
-									class:align-center={align === 'center'}
-									class:align-right={align === 'right'}
+									class:align-center={align === "center"}
+									class:align-right={align === "right"}
 								>
-									{typeof accessor === 'function'
+									{typeof accessor === "function"
 										? accessor(item)
 										: item[accessor]}
 								</td>
@@ -114,7 +114,7 @@
 								<div
 									class="icon-button row"
 									title="Edit"
-									on:click={() => dispatch('edit', item.id)}
+									on:click={() => dispatch("edit", item.id)}
 								>
 									<IconPencil />
 								</div>
@@ -122,7 +122,7 @@
 								<div
 									class="icon-button row delete"
 									title="Delete"
-									on:click={() => dispatch('delete', item.id)}
+									on:click={() => dispatch("delete", item.id)}
 								>
 									<IconTrash />
 								</div>
@@ -150,33 +150,33 @@
 	}
 	article {
 		position: relative;
-		padding: 0;
 		border: 1px solid var(--muted-border-color);
+		padding: 0;
 	}
 	.header {
 		display: flex;
-		gap: 1em;
 		align-items: center;
+		gap: 1em;
 		padding: 1em 1em 0.5em;
 	}
 	h2 {
-		font-size: 1.25em;
-		font-weight: 500;
-		color: var(--h6-color);
 		margin: -0.1em 0 0;
+		color: var(--h6-color);
+		font-weight: 500;
+		font-size: 1.25em;
 	}
 	.filter {
-		flex: 1 1 auto;
 		position: relative;
+		flex: 1 1 auto;
 	}
 	.clear-filter {
-		cursor: pointer;
 		position: absolute;
 		top: calc(50% - 0.5em);
 		right: 1em;
+		cursor: pointer;
+		background: var(--icon-close) center/auto 1rem no-repeat;
 		width: 1em;
 		height: 1em;
-		background: var(--icon-close) center/auto 1rem no-repeat;
 	}
 	.clear-filter:hover {
 		filter: brightness(1.5);
@@ -198,13 +198,13 @@
 		border-bottom: 0;
 	}
 	.empty {
-		color: var(--muted-color);
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		justify-content: center;
+		align-items: center;
 		gap: 0.5em;
 		padding: 1em 0;
+		color: var(--muted-color);
 	}
 	.empty-icon {
 		opacity: 0.5;
@@ -220,11 +220,11 @@
 	}
 	.icon-button {
 		display: inline-flex;
-		cursor: pointer;
-		padding: 0.25em;
-		margin: -0.25em;
-		color: var(--primary);
 		transition: filter 0.2s;
+		cursor: pointer;
+		margin: -0.25em;
+		padding: 0.25em;
+		color: var(--primary);
 	}
 	.icon-button:hover {
 		filter: brightness(1.5);

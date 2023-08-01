@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LabelAsterisk from './LabelAsterisk.svelte';
+	import LabelAsterisk from "./LabelAsterisk.svelte";
 
 	export let name: string;
 	export let label: string;
@@ -13,7 +13,7 @@
 
 <label>
 	{label}<LabelAsterisk {required} />
-	<select {name} value={item?.[name]} aria-invalid={error ? 'true' : undefined}>
+	<select {name} value={item?.[name]} aria-invalid={error ? "true" : undefined}>
 		<option value="">Select...</option>
 		{#each options as { value, label } (value)}
 			<option {value}>{label}</option>
@@ -33,4 +33,3 @@
 		color: var(--form-element-invalid-active-border-color);
 	}
 </style>
-

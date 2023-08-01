@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { drawPdf } from '$lib/pdf/pdfDoc';
-	import FileSaver from 'file-saver';
+	import { onMount } from "svelte";
+	import { drawPdf } from "$lib/pdf/pdfDoc";
+	import FileSaver from "file-saver";
 
-	import { invoiceMeta, yourCompany } from '$lib/constants/strings';
+	import { invoiceMeta, yourCompany } from "$lib/constants/strings";
 
 	let pdfNotGenerated = true;
 	let pdf = {} as HTMLIFrameElement;
@@ -12,22 +12,22 @@
 	const saveFile = (
 		pdf: string | undefined,
 		meta: { invoiceNumber: string },
-		company: { name: string }
+		company: { name: string },
 	) => {
-		if (typeof pdf !== 'string') return;
+		if (typeof pdf !== "string") return;
 		const filename = `invoice_${meta.invoiceNumber}_${company.name}`;
-		FileSaver.saveAs(pdf, filename + '.pdf');
+		FileSaver.saveAs(pdf, filename + ".pdf");
 	};
 
 	onMount(async () => {
 		try {
 			pdfString = await drawPdf();
-			if (typeof pdfString === 'string') {
+			if (typeof pdfString === "string") {
 				pdf.src = pdfString;
 				pdfNotGenerated = false;
 			}
 		} catch (err) {
-			console.log('something went wrong', err);
+			console.log("something went wrong", err);
 		}
 	});
 </script>

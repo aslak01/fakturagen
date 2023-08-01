@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import LabelAsterisk from './LabelAsterisk.svelte';
+	import { onMount } from "svelte";
+	import LabelAsterisk from "./LabelAsterisk.svelte";
 
 	type UnknownItem = Record<string, unknown> | null;
 
@@ -10,17 +10,17 @@
 	export let errors: { message: string; path: string[] }[] | null = null;
 	export let item: UnknownItem;
 	$: error = errors?.find((e) => e.path.includes(name));
-	let value = '';
+	let value = "";
 
 	const validateItem = (item: UnknownItem) => {
-		if (typeof item !== 'object' || Array.isArray(item) || item === null)
-			return '';
-		if (name in item === false) return '';
+		if (typeof item !== "object" || Array.isArray(item) || item === null)
+			return "";
+		if (name in item === false) return "";
 		const obj = item;
 		const key = name;
 		const string = obj[key];
-		if (typeof string !== 'string') return '';
-		const date = string.split('T')[0];
+		if (typeof string !== "string") return "";
+		const date = string.split("T")[0];
 		return date;
 	};
 
@@ -36,7 +36,7 @@
 		type="date"
 		{name}
 		{required}
-		aria-invalid={error ? 'true' : undefined}
+		aria-invalid={error ? "true" : undefined}
 		{value}
 	/>
 	{#if error}

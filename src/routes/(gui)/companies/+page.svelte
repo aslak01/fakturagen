@@ -1,20 +1,20 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
-	import AuthorizationAlert from '$lib/components/AuthorizationAlert.svelte';
-	import DataTable from '$lib/components/DataTable.svelte';
+	import { invalidateAll } from "$app/navigation";
+	import AuthorizationAlert from "$lib/components/AuthorizationAlert.svelte";
+	import DataTable from "$lib/components/DataTable.svelte";
 	// import TextareaInput from '$lib/components/inputs/TextareaInput.svelte';
-	import TextInput from '$lib/components/inputs/TextInput.svelte';
-	import ModalEditor from '$lib/components/ModalEditor.svelte';
-	import { savable } from '$lib/savable';
-	import { trpc } from '$lib/trpc/client';
-	import type { RouterInputs } from '$lib/trpc/router';
-	import { TRPCClientError } from '@trpc/client';
-	import type { PageData } from './$types';
+	import TextInput from "$lib/components/inputs/TextInput.svelte";
+	import ModalEditor from "$lib/components/ModalEditor.svelte";
+	import { savable } from "$lib/savable";
+	import { trpc } from "$lib/trpc/client";
+	import type { RouterInputs } from "$lib/trpc/router";
+	import { TRPCClientError } from "@trpc/client";
+	import type { PageData } from "./$types";
 
 	export let data: PageData;
 
 	let busy = false;
-	let item: RouterInputs['companies']['save'] | null = null;
+	let item: RouterInputs["companies"]["save"] | null = null;
 	let errors: { message: string; path: string[] }[] | null = null;
 	let needsAuthorization = false;
 
@@ -27,7 +27,7 @@
 
 	const handleAdd = async () => {
 		ioCheckAuth();
-		item = { id: null, name: '', currency: '', orgNo: '' };
+		item = { id: null, name: "", currency: "", orgNo: "" };
 	};
 
 	const handleEdit = async (e: CustomEvent<string>) => {
@@ -51,7 +51,7 @@
 	};
 
 	const handleSave = async (e: {
-		detail: RouterInputs['companies']['save'];
+		detail: RouterInputs["companies"]["save"];
 	}) => {
 		ioCheckAuth();
 		busy = true;
@@ -80,16 +80,16 @@
 	title="Companies"
 	items={data.companies}
 	columns={[
-		{ title: 'Name', grow: true, accessor: (company) => company.name },
+		{ title: "Name", grow: true, accessor: (company) => company.name },
 		{
-			title: 'Organisation number',
-			accessor: (company) => (company.orgNo ? company.orgNo : 'ukjent')
+			title: "Organisation number",
+			accessor: (company) => (company.orgNo ? company.orgNo : "ukjent"),
 		},
 		{
-			title: 'Invoices',
-			align: 'right',
-			accessor: (company) => (company.invoices ? company.invoices.length : '0')
-		}
+			title: "Invoices",
+			align: "right",
+			accessor: (company) => (company.invoices ? company.invoices.length : "0"),
+		},
 	]}
 	on:add={handleAdd}
 	on:edit={handleEdit}

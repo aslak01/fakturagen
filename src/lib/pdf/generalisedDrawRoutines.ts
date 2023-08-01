@@ -1,6 +1,6 @@
-import type { Coords, Constraints } from '$lib/interfaces/pdf';
-import type { PDFPage, RGB, PDFFont } from 'pdf-lib';
-import { defaults } from '$lib/constants/pdfSettings';
+import type { Coords, Constraints } from "$lib/interfaces/pdf";
+import type { PDFPage, RGB, PDFFont } from "pdf-lib";
+import { defaults } from "$lib/constants/pdfSettings";
 
 export const drawInline = (
 	string: string,
@@ -9,7 +9,7 @@ export const drawInline = (
 	page: PDFPage,
 	size: number = defaults.size.small,
 	color: RGB = defaults.color.black,
-	leading: number = defaults.leading.tight
+	leading: number = defaults.leading.tight,
 ) => {
 	const stringLength = font.widthOfTextAtSize(string, size);
 	const stringHeight = font.heightAtSize(size) + leading;
@@ -18,14 +18,14 @@ export const drawInline = (
 		y: constraints.y,
 		font,
 		size,
-		color
+		color,
 	});
 
 	return {
 		xmin: constraints.x,
 		xmax: constraints.x + stringLength,
 		ymin: constraints.y,
-		ymax: constraints.y - stringHeight
+		ymax: constraints.y - stringHeight,
 	};
 };
 
@@ -35,7 +35,7 @@ export const drawLinesLeft = (
 	font: PDFFont,
 	page: PDFPage,
 	size: number = defaults.size.small,
-	leading: number = defaults.leading.tight
+	leading: number = defaults.leading.tight,
 ) => {
 	const ogY = constraints.y;
 	let yPos = ogY;
@@ -49,7 +49,7 @@ export const drawLinesLeft = (
 			x: xPos,
 			y: yPos,
 			font,
-			size
+			size,
 		});
 		yPos -= lineHeight;
 	}
@@ -57,7 +57,7 @@ export const drawLinesLeft = (
 		xmin: xPos,
 		xmax: xPos + longestLine,
 		ymin: ogY,
-		ymax: yPos
+		ymax: yPos,
 	};
 };
 
@@ -67,7 +67,7 @@ export const drawLinesRight = (
 	font: PDFFont,
 	page: PDFPage,
 	size: number = defaults.size.small,
-	leading: number = defaults.leading.tight
+	leading: number = defaults.leading.tight,
 ) => {
 	const longestLine = calculateMaxLineLength(input, font, size);
 	let yPos = constraints.y;
@@ -78,7 +78,7 @@ export const drawLinesRight = (
 			x: xPos,
 			y: yPos,
 			font,
-			size
+			size,
 		});
 		yPos -= lineHeight;
 		console.log(yPos, xPos);
@@ -92,7 +92,7 @@ export const drawLinesRightAligned = (
 	font: PDFFont,
 	page: PDFPage,
 	size: number = defaults.size.small,
-	leading: number = defaults.leading.tight
+	leading: number = defaults.leading.tight,
 ) => {
 	const ogY = constraints.y;
 	let yPos = ogY;
@@ -106,7 +106,7 @@ export const drawLinesRightAligned = (
 			x: xPos - length,
 			y: yPos,
 			font,
-			size
+			size,
 		});
 		yPos -= lineHeight;
 	}
@@ -114,14 +114,14 @@ export const drawLinesRightAligned = (
 		xmin: constraints.x,
 		xmax: constraints.x - longestLine,
 		ymin: ogY,
-		ymax: yPos
+		ymax: yPos,
 	};
 };
 
 export const calculateMaxLineLength = (
 	input: string[],
 	font: PDFFont,
-	size: number
+	size: number,
 ) => {
 	let length = 0;
 	for (const line of input) {

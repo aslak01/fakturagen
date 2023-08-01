@@ -1,8 +1,8 @@
 <script lang="ts">
-	import dayjs from '$lib/dayjs';
-	import IconClock from '$lib/icons/IconClock.svelte';
-	import { createEventDispatcher } from 'svelte';
-	import BusyOverlay from './BusyOverlay.svelte';
+	import dayjs from "$lib/dayjs";
+	import IconClock from "$lib/icons/IconClock.svelte";
+	import { createEventDispatcher } from "svelte";
+	import BusyOverlay from "./BusyOverlay.svelte";
 
 	type T = $$Generic;
 
@@ -20,7 +20,7 @@
 	const dispatch = createEventDispatcher<{ cancel: never; save: T }>();
 
 	const handleCancel = () => {
-		dispatch('cancel');
+		dispatch("cancel");
 	};
 
 	const handleSave = (e: { currentTarget: HTMLFormElement }) => {
@@ -41,7 +41,7 @@
 				data[key] = value;
 			}
 		}
-		dispatch('save', data as T);
+		dispatch("save", data as T);
 	};
 	$: console.log(item);
 </script>
@@ -59,7 +59,7 @@
 					class="close"
 					on:click|preventDefault={handleCancel}
 				/>
-				{item?.id ? 'Edit' : 'Add'}
+				{item?.id ? "Edit" : "Add"}
 				{itemName}
 			</header>
 			<slot />
@@ -68,7 +68,7 @@
 					<span class="clock-icon"><IconClock /></span>
 					Last updated
 					{dayjs(item.updatedAt).fromNow()}
-					{item.updatedBy ? ` by ${item.updatedBy.name}` : ''}
+					{item.updatedBy ? ` by ${item.updatedBy.name}` : ""}
 				</small>
 			{/if}
 			<footer>

@@ -1,4 +1,4 @@
-import { PDFDocument, StandardFonts, cmyk } from 'pdf-lib';
+import { PDFDocument, StandardFonts, cmyk } from "pdf-lib";
 
 import {
 	locale,
@@ -12,21 +12,21 @@ import {
 	lines,
 	pdfTitle,
 	vat,
-	sum
-} from '$lib/constants/strings';
+	sum,
+} from "$lib/constants/strings";
 
-import { meta } from '$lib/constants/titles';
-import { defaults } from '$lib/constants/pdfSettings';
+import { meta } from "$lib/constants/titles";
+import { defaults } from "$lib/constants/pdfSettings";
 import {
 	drawInline,
 	drawLinesLeft,
-	drawLinesRightAligned
-} from '$lib/pdf/generalisedDrawRoutines';
+	drawLinesRightAligned,
+} from "$lib/pdf/generalisedDrawRoutines";
 
-import { lineDrawer } from './lineDrawer';
+import { lineDrawer } from "./lineDrawer";
 
 export async function drawPdf() {
-	if (typeof lines === 'undefined') return;
+	if (typeof lines === "undefined") return;
 
 	const pdfDoc = await PDFDocument.create();
 	const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
@@ -48,70 +48,72 @@ export async function drawPdf() {
 	const bounds = {
 		upper: {
 			x: defaults.xMargin,
-			y: height - defaults.yMargin
+			y: height - defaults.yMargin,
 		},
 		lower: {
 			x: width - defaults.xMargin,
-			y: defaults.yMargin
-		}
+			y: defaults.yMargin,
+		},
 	};
 
 	const borders = {
 		xmin: defaults.xMargin,
 		xmax: width - defaults.xMargin,
 		ymin: height - defaults.yMargin,
-		ymax: defaults.yMargin
+		ymax: defaults.yMargin,
 	};
 
 	const topRightBox = {
 		xmin: borders.xmax / 1.3,
-		xmax: borders.xmax
+		xmax: borders.xmax,
 	};
 
 	const padding = {
-		normal: helvetica.heightAtSize(defaults.size.small) + defaults.leading.small
+		normal:
+			helvetica.heightAtSize(defaults.size.small) + defaults.leading.small,
 	};
 	const heightOfALine = {
-		normal: helvetica.heightAtSize(defaults.size.small) + defaults.leading.small
+		normal:
+			helvetica.heightAtSize(defaults.size.small) + defaults.leading.small,
 	};
 
 	const titleDim = drawInline(
 		meta.title[locale],
 		{ x: bounds.upper.x, y: bounds.upper.y },
 		helveticaBold,
-		page
+		page,
 	);
 
 	const customerDimensions = drawLinesLeft(
 		Object.values(customer),
 		{ x: borders.xmin, y: titleDim.ymax - padding.normal },
 		helvetica,
-		page
+		page,
 	);
 
 	const companyInfo = drawLinesRightAligned(
 		Object.values(yourCompany),
 		{ x: topRightBox.xmax, y: borders.ymin },
 		helvetica,
-		page
+		page,
 	);
 
 	const invoiceDetails = drawLinesRightAligned(
 		Object.values(invoiceMeta),
 		{ x: topRightBox.xmax, y: companyInfo.ymax - padding.normal },
 		helvetica,
-		page
+		page,
 	);
 
 	const invoiceDetailHeadings = drawLinesLeft(
 		Object.values(meta.payInfo[locale]),
 		{ x: topRightBox.xmin, y: companyInfo.ymax - padding.normal },
 		helveticaBold,
-		page
+		page,
 	);
 	const constraints = {
 		x: borders.xmin,
-		y: invoiceDetailHeadings.ymax - padding.normal
+		y: invoiceDetailHeadings.ymax - padding.normal,
 	};
 	// const quadrants = [20, 79.5, 0.5]
 	const quadrants = vat.enabled ? [10, 52, 11, 12, 16] : [10, 74, 16];
@@ -126,7 +128,7 @@ export async function drawPdf() {
 		quadrants,
 		helvetica,
 		helveticaBold,
-		page
+		page,
 	);
 
 	const widthOfSum = helveticaBold.widthOfTextAtSize(sum, defaults.size.medium);
@@ -134,25 +136,25 @@ export async function drawPdf() {
 		x: borders.xmax - widthOfSum,
 		y: linesEnd - heightOfALine.normal * 2,
 		font: helveticaBold,
-		size: defaults.size.medium
+		size: defaults.size.medium,
 	});
 
 	const payHeading = meta.payableTo[locale];
 	const widthOfPayHeading = helveticaBold.widthOfTextAtSize(
 		payHeading,
-		defaults.size.small
+		defaults.size.small,
 	);
 	const payHeadingPos = page.drawText(payHeading, {
 		x: borders.xmax - widthOfPayHeading,
 		y: linesEnd - heightOfALine.normal * 3,
-		font: helveticaBold
+		font: helveticaBold,
 	});
 
 	const payDetails = drawLinesRightAligned(
 		Object.values(yourBank),
 		{ x: borders.xmax, y: linesEnd - heightOfALine.normal * 4 },
 		helvetica,
-		page
+		page,
 	);
 	const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
 
